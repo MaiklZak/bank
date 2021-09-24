@@ -1,5 +1,6 @@
 package com.app.bank.entity;
 
+import com.app.bank.dto.CreditDto;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -20,6 +21,15 @@ public class Credit {
 
     @Column(name = "interest_rate")
     private BigDecimal interestRate;
+
+    public Credit() {
+    }
+
+    public Credit(CreditDto creditDto) {
+        this.id = creditDto.getId();
+        this.limitOn = creditDto.getLimitOn();
+        this.interestRate = creditDto.getInterestRate();
+    }
 
     public UUID getId() {
         return id;

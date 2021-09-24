@@ -1,21 +1,13 @@
-package com.app.bank.entity;
+package com.app.bank.dto;
 
-import com.app.bank.dto.ClientDto;
-import org.hibernate.annotations.GenericGenerator;
+import com.app.bank.entity.Client;
 
-import javax.persistence.*;
 import java.util.UUID;
 
-@Entity
-@Table(name = "client")
-public class Client {
+public class ClientDto {
 
-    @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
     private UUID id;
 
-    @Column(name = "full_name")
     private String fullName;
 
     private String phone;
@@ -24,15 +16,15 @@ public class Client {
 
     private String passport;
 
-    public Client() {
+    public ClientDto() {
     }
 
-    public Client(ClientDto clientDto) {
-        this.id = clientDto.getId();
-        this.fullName = clientDto.getFullName();
-        this.phone = clientDto.getPhone();
-        this.email = clientDto.getEmail();
-        this.passport = clientDto.getPassport();
+    public ClientDto(Client client) {
+        this.id = client.getId();
+        this.fullName = client.getFullName();
+        this.phone = client.getPhone();
+        this.email = client.getEmail();
+        this.passport = client.getPassport();
     }
 
     public UUID getId() {
@@ -73,5 +65,16 @@ public class Client {
 
     public void setPassport(String passport) {
         this.passport = passport;
+    }
+
+    @Override
+    public String toString() {
+        return "ClientDto{" +
+                "id=" + id +
+                ", fullName='" + fullName + '\'' +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                ", passport='" + passport + '\'' +
+                '}';
     }
 }
