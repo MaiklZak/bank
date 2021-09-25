@@ -20,31 +20,38 @@ public class CreditController {
 
     private final Logger logger = LoggerFactory.getLogger(CreditController.class);
 
-    private final CreditServiceImpl creditServiceImpl;
+    private final CreditServiceImpl creditService;
 
     @Autowired
-    public CreditController(CreditServiceImpl creditServiceImpl) {
-        this.creditServiceImpl = creditServiceImpl;
+    public CreditController(CreditServiceImpl creditService) {
+        this.creditService = creditService;
     }
 
     @GetMapping
     public String getPageOfCreditsList(Model model) {
         logger.info("Getting all credits");
-        model.addAttribute("credits", creditServiceImpl.getAll());
-        return "creditsList";
+        model.addAttribute("credits", creditService.getAll());
+        return "credit/list";
     }
 
     @GetMapping("/{id}")
-    public String getPageOfCredits(@PathVariable UUID id, Model model) throws NoSuchEntityException {
+    public String getPageOfCredit(@PathVariable UUID id, Model model) throws NoSuchEntityException {
         logger.info("Getting credit with id: {}", id);
-        CreditDto creditById = creditServiceImpl.getById(id);
+        CreditDto creditById = creditService.getById(id);
         model.addAttribute("credit", creditById);
-        return "credit";
+        return "credit/form";
     }
 
-    @PostMapping
+    @GetMapping("/new")
+    public String getPageOfCredit(Model model) {
+        logger.info("Getting page for creating new credit");
+        model.addAttribute("credit", new CreditDto());
+        return "credit/form";
+    }
+
+    @PostMapping("/new")
     public String saveNewCredit(@ModelAttribute CreditDto creditDto) {
-        UUID idOfSavedCredit = creditServiceImpl.save(creditDto);
+        UUID idOfSavedCredit = creditService.save(creditDto);
         logger.info("Credit with id: {} saved", idOfSavedCredit);
         return REDIRECT_URL_CREDIT + idOfSavedCredit;
     }
@@ -52,14 +59,14 @@ public class CreditController {
     @GetMapping("/remove/{id}")
     public String removeCreditById(@PathVariable UUID id) {
         logger.info("Removing credit with id: {}", id);
-        creditServiceImpl.deleteById(id);
+        creditService.deleteById(id);
         return REDIRECT_URL_CREDIT + id;
     }
 
     @PostMapping("/update")
     public String updateCredit(@ModelAttribute CreditDto creditDto) throws NoSuchEntityException {
         logger.info("Updating credit with id: {}", creditDto.getId());
-        creditServiceImpl.update(creditDto);
+        creditService.update(creditDto);
         return REDIRECT_URL_CREDIT + creditDto.getId();
     }
 }

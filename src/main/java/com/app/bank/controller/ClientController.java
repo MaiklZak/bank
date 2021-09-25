@@ -21,33 +21,40 @@ public class ClientController {
 
     private final Logger logger = LoggerFactory.getLogger(ClientController.class);
 
-    private final ClientServiceImpl clientServiceImpl;
+    private final ClientServiceImpl clientService;
 
 
     @Autowired
-    public ClientController(ClientServiceImpl clientServiceImpl) {
-        this.clientServiceImpl = clientServiceImpl;
+    public ClientController(ClientServiceImpl clientService) {
+        this.clientService = clientService;
     }
 
     @GetMapping
     public String getPageOfClientsList(Model model) {
         logger.info("Getting all clients");
-        List<ClientDto> clients = clientServiceImpl.getAll();
+        List<ClientDto> clients = clientService.getAll();
         model.addAttribute("clients", clients);
-        return "clientsList";
+        return "client/list";
     }
 
     @GetMapping("/{id}")
-    public String getPageOfClient(@PathVariable UUID id, Model model) throws NoSuchEntityException {
+    public String getPageOfClientForEdit(@PathVariable UUID id, Model model) throws NoSuchEntityException {
         logger.info("Getting client with id: {}", id);
-        ClientDto clientDto = clientServiceImpl.getById(id);
+        ClientDto clientDto = clientService.getById(id);
         model.addAttribute("client", clientDto);
-        return "client";
+        return "client/form";
     }
 
-    @PostMapping
+    @GetMapping("/new")
+    public String getPageOfClientForCreate(Model model) {
+        logger.info("Getting page for creating new client");
+        model.addAttribute("client", new ClientDto());
+        return "client/form";
+    }
+
+    @PostMapping("/new")
     public String saveNewClient(@ModelAttribute ClientDto clientDto) {
-        UUID idOfSavedClient = clientServiceImpl.save(clientDto);
+        UUID idOfSavedClient = clientService.save(clientDto);
         logger.info("Client with id: {} saved", idOfSavedClient);
         return REDIRECT_URL_CLIENT + idOfSavedClient;
     }
@@ -55,14 +62,14 @@ public class ClientController {
     @GetMapping("/remove/{id}")
     public String removeClientById(@PathVariable UUID id) {
         logger.info("Removing client with id: {}", id);
-        clientServiceImpl.deleteById(id);
+        clientService.deleteById(id);
         return REDIRECT_URL_CLIENT + id;
     }
 
     @PostMapping("/update")
     public String updateClient(@ModelAttribute ClientDto clientDto) throws NoSuchEntityException {
         logger.info("Updating client with id: {}", clientDto.getId());
-        clientServiceImpl.update(clientDto);
+        clientService.update(clientDto);
         return REDIRECT_URL_CLIENT + clientDto.getId();
     }
 }

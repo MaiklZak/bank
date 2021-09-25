@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Credit</title>
+    <th:block th:insert="fragments/common :: head"/>
+</head>
+<body>
+<header th:insert="fragments/navbar :: navbar"></header>
+<section class="container mx-auto">
+    <h2>Credit</h2>
+    <form method="post" th:action="${credit.id == null ? '/credits/new' : '/credits/update'}" th:object="${credit}">
+        <input type="hidden" th:field="*{id}">
+        <div class="row">
+            <div class="col-sm-2">
+                <label for="limit" class="form-label">Limit</label>
+                <input type="text" class="form-control" id="limit" th:field="*{limitOn}">
+            </div>
+            <div class="col-sm-2">
+                <label for="interestRate" class="form-label">Interest Rate</label>
+                <input type="text" class="form-control" id="interestRate" th:field="*{interestRate}">
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary mt-4">Save</button>
+    </form>
+    <div th:if="${credit.id}">
+        <a type="button" th:href="@{'/credits/remove/' + ${credit.id}}" class="btn btn-danger mt-4">Remove</a>
+    </div>
+</section>
+</body>
+<th:block th:insert="fragments/common :: foot"/>
+</html>

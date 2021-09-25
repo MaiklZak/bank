@@ -27,8 +27,17 @@ public class Offer {
 
     private BigDecimal amount;
 
-    @OneToMany
+    @OneToMany(mappedBy = "offer")
     private Set<SchedulePayment> schedulePayments = new HashSet<>();
+
+    public Offer() {
+    }
+
+    public Offer(Client client, Credit credit, BigDecimal amount) {
+        this.client = client;
+        this.credit = credit;
+        this.amount = amount;
+    }
 
     public UUID getId() {
         return id;

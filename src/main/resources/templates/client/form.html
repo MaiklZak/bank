@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Client</title>
+    <th:block th:insert="fragments/common :: head"/>
+</head>
+<body>
+<header th:insert="fragments/navbar :: navbar"></header>
+<section class="container">
+    <h2>Client</h2>
+<!--    <form method="post" th:action="@{/clients/update}" th:object="${client}">-->
+    <form method="post" th:action="${client.id == null ? '/clients/new' : '/clients/update'}" th:object="${client}">
+        <input type="hidden" th:field="*{id}">
+        <div class="mb-3">
+            <label for="fullName" class="form-label">Full Name</label>
+            <input type="text" class="form-control" id="fullName" th:field="*{fullName}">
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" th:field="*{email}">
+        </div>
+        <div class="mb-3">
+            <label for="phone" class="form-label">Phone</label>
+            <input type="text" class="form-control" id="phone" th:field="*{phone}">
+        </div>
+        <div class="mb-3">
+            <label for="passport" class="form-label">Passport</label>
+            <input type="text" class="form-control" id="passport" th:field="*{passport}">
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+    <div th:if="${client.id}">
+        <a th:href="@{'/clients/remove/' + ${client.id}}" class="btn btn-danger mt-4">remove</a>
+    </div>
+</section>
+<th:block th:insert="fragments/common :: foot"/>
+</body>
+</html>

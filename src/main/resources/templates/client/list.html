@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Clients</title>
+    <th:block th:insert="fragments/common :: head"/>
+</head>
+<body>
+<header th:insert="fragments/navbar :: navbar"></header>
+<section class="container">
+    <h2>Clients</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Full Name</th>
+            <th scope="col">Phone</th>
+            <th scope="col">Email</th>
+            <th scope="col">Passport</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="client : ${clients}">
+            <td th:text="${client.fullName}"></td>
+            <td th:text="${client.phone}"></td>
+            <td th:text="${client.email}"></td>
+            <td th:text="${client.passport}"></td>
+            <td><a th:href="@{'/clients/' + ${client.id}}">Detail</a></td>
+        </tr>
+        </tbody>
+    </table>
+</section>
+<th:block th:insert="fragments/common :: foot"/>
+</body>
+</html>
