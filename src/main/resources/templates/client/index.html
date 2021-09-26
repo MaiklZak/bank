@@ -1,10 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Client</title>
+    <th:block th:insert="fragments/common :: head"/>
 </head>
 <body>
-
+<header th:insert="fragments/navbar :: navbar"></header>
+<section class="container mt-4">
+    <h2 class="text-right" th:text="${client.fullName}">Client</h2>
+    <a class="btn btn-secondary" th:href="@{'/clients/update/' + ${client.id}}">Edit client</a>
+</section>
+<section class="container text-center">
+            <h3>Client's offers</h3>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Amount</th>
+            <th scope="col">Limit of credit</th>
+            <th scope="col">Interest rate of credit</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="offer : ${offers}">
+            <td th:text="${'₽' + offer.amount}"></td>
+            <td th:text="${'₽' + offer.creditDto.limitOn}"></td>
+            <td th:text="${offer.creditDto.interestRate + ' %'}"></td>
+            <td><a class="btn btn-secondary" th:href="@{'/offers/' + ${offer.id}}">Edit</a></td>
+            <td><a class="btn btn-danger" th:href="@{'/offers/remove/' + ${offer.id}(clientId=${client.id})}">Remove</a></td>
+        </tr>
+        </tbody>
+    </table>
+    <a class="btn btn-secondary" th:href="@{'/offers/new/' + ${client.id}}">Add new offer</a>
+</section>
+<th:block th:insert="fragments/common :: foot"/>
 </body>
 </html>

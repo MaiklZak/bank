@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Main page</title>
+    <th:block th:insert="fragments/common :: head"/>
+</head>
+<body>
+<header th:insert="fragments/navbar :: navbar"></header>
+<section class="container">
+    <h2>Welcome to the Bank</h2>
+</section>
+<th:block th:insert="fragments/common :: foot"/>
+</body>
+</html>

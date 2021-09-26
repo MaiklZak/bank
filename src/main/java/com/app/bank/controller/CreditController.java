@@ -51,8 +51,8 @@ public class CreditController {
 
     @PostMapping("/new")
     public String saveNewCredit(@ModelAttribute CreditDto creditDto) {
+        logger.info("Saving new credit");
         UUID idOfSavedCredit = creditService.save(creditDto);
-        logger.info("Credit with id: {} saved", idOfSavedCredit);
         return REDIRECT_URL_CREDIT + idOfSavedCredit;
     }
 

@@ -1,8 +1,10 @@
 package com.app.bank.controller;
 
 import com.app.bank.dto.ClientDto;
+import com.app.bank.dto.OfferDto;
 import com.app.bank.error.NoSuchEntityException;
 import com.app.bank.service.ClientServiceImpl;
+import com.app.bank.service.OfferServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +24,13 @@ public class ClientController {
     private final Logger logger = LoggerFactory.getLogger(ClientController.class);
 
     private final ClientServiceImpl clientService;
+    private final OfferServiceImpl offerService;
 
 
     @Autowired
-    public ClientController(ClientServiceImpl clientService) {
+    public ClientController(ClientServiceImpl clientService, OfferServiceImpl offerService) {
         this.clientService = clientService;
+        this.offerService = offerService;
     }
 
     @GetMapping
@@ -38,11 +42,28 @@ public class ClientController {
     }
 
     @GetMapping("/{id}")
+    public String getPageOfClient(@PathVariable UUID id, Model model) throws NoSuchEntityException {
+        logger.info("Getting client with offers with id: {}", id);
+        ClientDto clientDto = clientService.getById(id);
+        List<OfferDto> offersByClientId = offerService.getByClientId(id);
+        model.addAttribute("client", clientDto);
+        model.addAttribute("offers", offersByClientId);
+        return "client/index";
+    }
+
+    @GetMapping("/update/{id}")
     public String getPageOfClientForEdit(@PathVariable UUID id, Model model) throws NoSuchEntityException {
-        logger.info("Getting client with id: {}", id);
+        logger.info("Getting client for editing with id: {}", id);
         ClientDto clientDto = clientService.getById(id);
         model.addAttribute("client", clientDto);
         return "client/form";
+    }
+
+    @PostMapping("/update")
+    public String updateClient(@ModelAttribute ClientDto clientDto) throws NoSuchEntityException {
+        logger.info("Updating client with id: {}", clientDto.getId());
+        clientService.update(clientDto);
+        return REDIRECT_URL_CLIENT + clientDto.getId();
     }
 
     @GetMapping("/new")
@@ -54,8 +75,8 @@ public class ClientController {
 
     @PostMapping("/new")
     public String saveNewClient(@ModelAttribute ClientDto clientDto) {
+        logger.info("Saving new client");
         UUID idOfSavedClient = clientService.save(clientDto);
-        logger.info("Client with id: {} saved", idOfSavedClient);
         return REDIRECT_URL_CLIENT + idOfSavedClient;
     }
 
@@ -64,12 +85,5 @@ public class ClientController {
         logger.info("Removing client with id: {}", id);
         clientService.deleteById(id);
         return REDIRECT_URL_CLIENT + id;
-    }
-
-    @PostMapping("/update")
-    public String updateClient(@ModelAttribute ClientDto clientDto) throws NoSuchEntityException {
-        logger.info("Updating client with id: {}", clientDto.getId());
-        clientService.update(clientDto);
-        return REDIRECT_URL_CLIENT + clientDto.getId();
     }
 }

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Offer</title>
+    <th:block th:insert="fragments/common :: head"/>
+</head>
+<body>
+<header th:insert="fragments/navbar :: navbar"></header>
+<section class="container">
+    <h2 th:text="${'Offer for: ' + offer.clientDto.fullName}"></h2>
+    <form method="post" th:action="${offer.id == null ? '/offers/new' : '/offers/update'}" th:object="${offer}">
+        <input type="hidden" th:field="*{id}">
+        <input type="hidden" class="form-control" th:field="*{amount}">
+        <input type="hidden" name="clientId" th:value="${offer.clientDto.id}">
+        <div class="row gy-2 gx-3 align-items-center">
+            <div class="col-auto">
+                <fieldset disabled aria-label="Disabled example">
+                    <label class="sr-only" for="amount">Amount</label>
+                    <input type="text" class="form-control" id="amount" th:field="*{amount}">
+                </fieldset>
+            </div>
+            <div class="col-auto">
+                <label class="sr-only" for="autoSizingSelect">Credit</label>
+                <select class="form-select" id="autoSizingSelect" name="creditId">
+                    <option th:if="${offer.creditDto != null}" selected th:value="${offer.creditDto.id}"
+                            th:text="${'₽' + offer.creditDto.limitOn + ' ' + offer.creditDto.interestRate + '%'}">
+                        Choose...
+                    </option>
+                    <th:block th:each="credit : ${credits}">
+                        <option th:value="${credit.id}"
+                                th:text="${'₽' + credit.limitOn + ' ' + credit.interestRate + '%'}">
+                        </option>
+                    </th:block>
+                </select>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary mt-2">Save</button>
+        <a th:unless="${offer.id == null}" type="submit" th:href="@{'/offers/' + ${offer.id}}" class="btn btn-primary mt-2">Clear</a>
+        <a th:if="${offer.id == null}" type="submit" th:href="@{'/offers/new/' + ${offer.clientDto.id}}" class="btn btn-primary mt-2">Clear</a>
+    </form>
+</section>
+<th:block th:insert="fragments/common :: foot"/>
+</body>
+</html>
