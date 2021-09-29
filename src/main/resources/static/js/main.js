@@ -53,6 +53,40 @@ $(document).ready((function () {
         });
     });
 
-    /*------------------------------------------------------------------------------------*/
+    /*-----------------------------List clients-------------------------------------------------------*/
+    let btnClients = $('#btnClients');
+    btnClients.click(function () {
+        $.ajax({
+            url: '/clients',
+            type: 'get',
+            dataType: 'JSON',
+            data: {
+                offset: function () {
+                    var oldOffset = btnClients.data('offset');
+                    btnClients.data('offset', ++oldOffset);
+                    return btnClients.data('offset');
+                },
+                limit: function () {
+                    return btnClients.data('limit');
+                }
+            },
+            success: function (data) {
+                if (data < 20) {
+                    btnClients.hide();
+                }
+                var rows = '';
+                data.forEach(function (client) {
+                    rows = rows + '<tr>' +
+                        '<td>' + client.fullName + '</td>' +
+                        '<td>' + client.phone + '</td>' +
+                        '<td>' + client.email + '</td>' +
+                        '<td>' + client.passport + '</td>' +
+                        '<td><a class="btn btn-secondary btn-sm" href="/clients/' + client.id + '">Подробнее</a></td>' +
+                        '</tr>'
+                });
+                $('#tableClients').append(rows);
+            }
+        });
+    });
 
 }));

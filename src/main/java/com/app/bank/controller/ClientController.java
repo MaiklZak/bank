@@ -8,6 +8,7 @@ import com.app.bank.service.OfferServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -33,12 +34,18 @@ public class ClientController {
         this.offerService = offerService;
     }
 
-    @GetMapping
+    @GetMapping(produces = MediaType.TEXT_HTML_VALUE)
     public String getPageOfClientsList(Model model) {
         logger.info("Getting all clients");
-        List<ClientDto> clients = clientService.getAll();
+        List<ClientDto> clients = clientService.getPageOfClient(0, 20);
         model.addAttribute("clients", clients);
         return "client/list";
+    }
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public List<ClientDto> getPageOfClientsList(@RequestParam Integer offset, @RequestParam Integer limit) {
+        return clientService.getPageOfClient(offset, limit);
     }
 
     @GetMapping("/{id}")

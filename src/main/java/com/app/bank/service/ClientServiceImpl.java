@@ -5,6 +5,8 @@ import com.app.bank.entity.Client;
 import com.app.bank.error.NoSuchEntityException;
 import com.app.bank.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +32,15 @@ public class ClientServiceImpl {
     public List<ClientDto> getAll() {
         return clientRepository.findAll().stream()
                 .map(ClientDto::new).collect(Collectors.toList());
+    }
+
+    public List<ClientDto> getPageOfClient(Integer offset, Integer limit) {
+        Pageable nextPage = PageRequest.of(offset, limit);
+        return clientRepository.findAll(nextPage)
+                .getContent()
+                .stream()
+                .map(ClientDto::new)
+                .collect(Collectors.toList());
     }
 
     public ClientDto getById(UUID id) throws NoSuchEntityException {

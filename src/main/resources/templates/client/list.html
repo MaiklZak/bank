@@ -5,17 +5,17 @@
     <title>Clients</title>
     <th:block th:insert="fragments/common :: head"/>
 </head>
-<body>
+<body id="bodyClient">
 <header th:insert="fragments/navbar :: navbar"></header>
-<section class="container">
-    <h2>Clients</h2>
-    <table class="table">
+<section class="container text-center mb-4">
+    <h2 class="h1 mt-5 mb-5">Клиенты</h2>
+    <table class="table" id="tableClients">
         <thead>
         <tr>
-            <th scope="col">Full Name</th>
-            <th scope="col">Phone</th>
-            <th scope="col">Email</th>
-            <th scope="col">Passport</th>
+            <th scope="col">ФИО</th>
+            <th scope="col">Телефон</th>
+            <th scope="col">Эл. почта</th>
+            <th scope="col">Паспорт</th>
             <th scope="col"></th>
         </tr>
         </thead>
@@ -25,10 +25,11 @@
             <td th:text="${client.phone}"></td>
             <td th:text="${client.email}"></td>
             <td th:text="${client.passport}"></td>
-            <td><a th:href="@{'/clients/' + ${client.id}}">Detail</a></td>
+            <td><a class="btn btn-secondary btn-sm" th:href="@{'/clients/' + ${client.id}}">Подробнее</a></td>
         </tr>
         </tbody>
     </table>
+    <a class="btn btn-secondary mt-3 mb-5" id="btnClients" data-limit="20" data-offset="0">Показать еще</a>
 </section>
 <th:block th:insert="fragments/common :: foot"/>
 </body>
