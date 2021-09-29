@@ -1,6 +1,7 @@
 package com.app.bank.service;
 
 import com.app.bank.dto.OfferDto;
+import com.app.bank.dto.SchedulePaymentDto;
 import com.app.bank.entity.Client;
 import com.app.bank.entity.Credit;
 import com.app.bank.entity.Offer;
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class OfferServiceImpl implements EntityService<OfferDto> {
+public class OfferServiceImpl {
 
     private final OfferRepository offerRepository;
     private final ClientRepository clientRepository;
@@ -38,8 +39,7 @@ public class OfferServiceImpl implements EntityService<OfferDto> {
         this.schedulePaymentService = schedulePaymentService;
     }
 
-    @Override
-    public UUID save(OfferDto offerDto) throws InvalidFieldsException {
+    public UUID save(OfferDto offerDto, List<SchedulePaymentDto> scheduleDtoList) throws InvalidFieldsException {
         Optional<Client> clientById = clientRepository.findById(offerDto.getClientDto().getId());
         Optional<Credit> creditById = creditRepository.findById(offerDto.getCreditDto().getId());
         if (clientById.isEmpty() || creditById.isEmpty() || offerDto.getAmount() == null) {
@@ -48,20 +48,18 @@ public class OfferServiceImpl implements EntityService<OfferDto> {
         Offer offer = new Offer(clientById.get(), creditById.get(), offerDto.getAmount());
         offer = offerRepository.save(offer);
 
-        Set<SchedulePayment> schedulePayments = schedulePaymentService.generateScheduleForOffer(offer);
+        Set<SchedulePayment> schedulePayments = schedulePaymentService.generateScheduleForOffer(offer, scheduleDtoList);
         offer.setSchedulePayments(schedulePayments);
 
         return offerRepository.save(offer).getId();
     }
 
-    @Override
     public List<OfferDto> getAll() {
         return offerRepository.findAll().stream()
                 .map(OfferDto::new)
                 .collect(Collectors.toList());
     }
 
-    @Override
     public OfferDto getById(UUID id) throws NoSuchEntityException {
         Optional<Offer> offerById = offerRepository.findById(id);
         if (offerById.isEmpty()) {
@@ -70,13 +68,11 @@ public class OfferServiceImpl implements EntityService<OfferDto> {
         return new OfferDto(offerById.get());
     }
 
-    @Override
     public void deleteById(UUID id) {
         offerRepository.deleteById(id);
     }
 
-    @Override
-    public void update(OfferDto offerDto) throws NoSuchEntityException {
+    public void update(OfferDto offerDto, List<SchedulePaymentDto> scheduleDtoList) throws NoSuchEntityException {
         Optional<Offer> offerById = offerRepository.findById(offerDto.getId());
         if (offerById.isEmpty()) {
             throw new NoSuchEntityException("Offer with specified id does not exist");
@@ -84,6 +80,10 @@ public class OfferServiceImpl implements EntityService<OfferDto> {
         Offer offer = offerById.get();
         offer.setAmount(offerDto.getAmount());
         offer.setCredit(creditRepository.getById(offerDto.getCreditDto().getId()));
+
+        Set<SchedulePayment> schedulePayments = schedulePaymentService.generateScheduleForOffer(offer, scheduleDtoList);
+        offer.setSchedulePayments(schedulePayments);
+
         offerRepository.save(offer);
     }
 

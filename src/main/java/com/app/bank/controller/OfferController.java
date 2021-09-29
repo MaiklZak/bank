@@ -3,11 +3,13 @@ package com.app.bank.controller;
 import com.app.bank.dto.ClientDto;
 import com.app.bank.dto.CreditDto;
 import com.app.bank.dto.OfferDto;
+import com.app.bank.dto.SchedulePaymentDto;
 import com.app.bank.error.InvalidFieldsException;
 import com.app.bank.error.NoSuchEntityException;
 import com.app.bank.service.ClientServiceImpl;
 import com.app.bank.service.CreditServiceImpl;
 import com.app.bank.service.OfferServiceImpl;
+import com.app.bank.service.SchedulePaymentServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +30,14 @@ public class OfferController {
     private final OfferServiceImpl offerService;
     private final CreditServiceImpl creditService;
     private final ClientServiceImpl clientService;
+    private final SchedulePaymentServiceImpl schedulePaymentService;
 
     @Autowired
-    public OfferController(OfferServiceImpl offerService, CreditServiceImpl creditService, ClientServiceImpl clientService) {
+    public OfferController(OfferServiceImpl offerService, CreditServiceImpl creditService, ClientServiceImpl clientService, SchedulePaymentServiceImpl schedulePaymentService) {
         this.offerService = offerService;
         this.creditService = creditService;
         this.clientService = clientService;
+        this.schedulePaymentService = schedulePaymentService;
     }
 
     @GetMapping("/{id}")
@@ -44,15 +48,6 @@ public class OfferController {
         model.addAttribute("offer", offerById);
         model.addAttribute("credits", allCredits);
         return "offer/form";
-    }
-
-    @PostMapping("/update")
-    public String updateOffer(@ModelAttribute OfferDto offerDto, @RequestParam UUID creditId) throws NoSuchEntityException {
-        logger.info("Updating offer with id: {}", offerDto.getId());
-        CreditDto creditDto = creditService.getById(creditId);
-        offerDto.setCreditDto(creditDto);
-        offerService.update(offerDto);
-        return "redirect:/offers/" + offerDto.getId();
     }
 
     @GetMapping("/new/{clientId}")
@@ -67,17 +62,31 @@ public class OfferController {
         return "offer/form";
     }
 
-    @PostMapping("/new")
-    public String saveNewOffer(@ModelAttribute OfferDto offerDto, @RequestParam UUID creditId, @RequestParam UUID clientId) throws NoSuchEntityException, InvalidFieldsException {
+    @PostMapping({"/new", "/update"})
+    public String saveNewOffer(@ModelAttribute OfferDto offerDto,
+                               @RequestParam UUID creditId,
+                               @RequestParam UUID clientId,
+                               @RequestParam Integer countMonth,
+                               @RequestParam Integer datePayment) throws NoSuchEntityException, InvalidFieldsException {
         logger.info("Saving new offer");
         CreditDto creditDto = creditService.getById(creditId);
         ClientDto clientDto = clientService.getById(clientId);
         offerDto.setCreditDto(creditDto);
         offerDto.setClientDto(clientDto);
 
-        offerDto.setAmount(new BigDecimal("77777777.77")); //TODO set JavaScript
+        BigDecimal paymentMonth = schedulePaymentService
+                .computeMonthlyPayment(creditDto.getLimitOn(), creditDto.getInterestRate(), countMonth);
 
-        UUID saveOfferId = offerService.save(offerDto);
+        offerDto.setAmount(paymentMonth.multiply(BigDecimal.valueOf(countMonth)));
+
+        List<SchedulePaymentDto> scheduleDtoList = schedulePaymentService
+                .generateSchedule(creditDto.getLimitOn(), paymentMonth, creditDto.getInterestRate(), countMonth, datePayment);
+
+        if (offerDto.getId() == null) {
+            offerService.save(offerDto, scheduleDtoList);
+        } else {
+            offerService.update(offerDto, scheduleDtoList);
+        }
         return "redirect:/clients/" + clientId;
     }
 

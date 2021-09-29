@@ -1,5 +1,6 @@
 package com.app.bank.entity;
 
+import com.app.bank.dto.SchedulePaymentDto;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -31,6 +32,16 @@ public class SchedulePayment {
     @ManyToOne
     @JoinColumn(name = "offer_id")
     private Offer offer;
+
+    public SchedulePayment() {
+    }
+
+    public SchedulePayment(SchedulePaymentDto schedulePaymentDto) {
+        this.datePayment = schedulePaymentDto.getDatePayment();
+        this.amountPayment = schedulePaymentDto.getAmountPayment();
+        this.bodyRepayment = schedulePaymentDto.getBodyRepayment();
+        this.interestRepayment = schedulePaymentDto.getInterestRepayment();
+    }
 
     public UUID getId() {
         return id;

@@ -7,38 +7,71 @@
 </head>
 <body>
 <header th:insert="fragments/navbar :: navbar"></header>
-<section class="container">
-    <h2 th:text="${'Offer for: ' + offer.clientDto.fullName}"></h2>
+<section class="container-sm">
+    <h2 th:text="${'Предложение для: ' + offer.clientDto.fullName}"></h2>
     <form method="post" th:action="${offer.id == null ? '/offers/new' : '/offers/update'}" th:object="${offer}">
         <input type="hidden" th:field="*{id}">
-        <input type="hidden" class="form-control" th:field="*{amount}">
+        <input type="hidden" class="form-control" id="creditAmountHidden" name="amount" th:field="*{amount}">
         <input type="hidden" name="clientId" th:value="${offer.clientDto.id}">
         <div class="row gy-2 gx-3 align-items-center">
             <div class="col-auto">
-                <fieldset disabled aria-label="Disabled example">
-                    <label class="sr-only" for="amount">Amount</label>
-                    <input type="text" class="form-control" id="amount" th:field="*{amount}">
-                </fieldset>
-            </div>
-            <div class="col-auto">
-                <label class="sr-only" for="autoSizingSelect">Credit</label>
-                <select class="form-select" id="autoSizingSelect" name="creditId">
-                    <option th:if="${offer.creditDto != null}" selected th:value="${offer.creditDto.id}"
-                            th:text="${'₽' + offer.creditDto.limitOn + ' ' + offer.creditDto.interestRate + '%'}">
-                        Choose...
+                <label class="sr-only" for="selectCredit">Кредит</label>
+                <select class="form-select" id="selectCredit" name="creditId">
+                    <option selected value="not" id="defaultOption">
+                        Choose credit...
                     </option>
                     <th:block th:each="credit : ${credits}">
-                        <option th:value="${credit.id}"
-                                th:text="${'₽' + credit.limitOn + ' ' + credit.interestRate + '%'}">
+                        <option th:if="${offer.creditDto != null}"
+                                th:value="${credit.id}"
+                                th:attr="limit=${credit.limitOn},rate=${credit.interestRate}"
+                                th:text="${'₽' + credit.limitOn + ' - ' + credit.interestRate + '%' + (credit.id == offer.creditDto.id ? ' current': '')}">
+                        </option>
+                        <option th:unless="${offer.creditDto != null}"
+                                th:value="${credit.id}"
+                                th:attr="limit=${credit.limitOn},rate=${credit.interestRate}"
+                                th:text="${'₽' + credit.limitOn + ' - ' + credit.interestRate + '%'}">
                         </option>
                     </th:block>
                 </select>
             </div>
+            <div class="col-auto">
+                <label id="labelRange" for="customRange3" class="form-label">Срок кредита (лет) </label>
+                <input type="range" name="countMonth" class="form-range" min="12" max="180" step="12" id="customRange3">
+            </div>
+            <div class="col-auto">
+                <label class="sr-only" for="selectDate">Дата платежа</label>
+                <select class="form-select" id="selectDate" name="datePayment">
+                    <option th:value="5" th:text="${'5'}"></option>
+                    <option th:value="15" th:text="${'15'}"></option>
+                    <option th:value="25" th:text="${'25'}"></option>
+                </select>
+            </div>
         </div>
-        <button type="submit" class="btn btn-primary mt-2">Save</button>
-        <a th:unless="${offer.id == null}" type="submit" th:href="@{'/offers/' + ${offer.id}}" class="btn btn-primary mt-2">Clear</a>
-        <a th:if="${offer.id == null}" type="submit" th:href="@{'/offers/new/' + ${offer.clientDto.id}}" class="btn btn-primary mt-2">Clear</a>
+        <button type="submit" class="btn btn-primary mt-2">Оформить</button>
+        <a th:unless="${offer.id == null}" type="submit" th:href="@{'/offers/' + ${offer.id}}"
+           class="btn btn-primary mt-2">Сбросить</a>
+        <a th:if="${offer.id == null}" type="submit" th:href="@{'/offers/new/' + ${offer.clientDto.id}}"
+           class="btn btn-primary mt-2">Сбросить</a>
+        <a type="submit" class="btn btn-primary mt-2" id="computeSchedule">Посчитать</a>
     </form>
+        <div class="col-md-2" id="formAmount">
+            <fieldset disabled aria-label="Disabled example">
+                <label class="sr-only" for="creditAmount">Общая сумма</label>
+                <input type="text" class="form-control" id="creditAmount">
+            </fieldset>
+        </div>
+    <table class="table" id="tableSchedule">
+        <thead>
+        <tr>
+            <th scope="col">Дата платежа</th>
+            <th scope="col">Сумма платежа</th>
+            <th scope="col">Платеж по основному долгу</th>
+            <th scope="col">Платеж по процентам</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
 </section>
 <th:block th:insert="fragments/common :: foot"/>
 </body>

@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class CreditServiceImpl implements EntityService<CreditDto> {
+public class CreditServiceImpl {
 
     private final CreditRepository creditRepository;
 
@@ -24,19 +24,16 @@ public class CreditServiceImpl implements EntityService<CreditDto> {
         this.creditRepository = creditRepository;
     }
 
-    @Override
     public UUID save(CreditDto creditDto) {
         return creditRepository.save(new Credit(creditDto)).getId();
     }
 
-    @Override
     public List<CreditDto> getAll() {
         return creditRepository.findAll(Sort.by("limitOn")).stream()
                 .map(CreditDto::new)
                 .collect(Collectors.toList());
     }
 
-    @Override
     public CreditDto getById(UUID id) throws NoSuchEntityException {
         if (!creditRepository.existsById(id)) {
             throw new NoSuchEntityException("Credit with specified id does not exist");
@@ -44,12 +41,10 @@ public class CreditServiceImpl implements EntityService<CreditDto> {
         return new CreditDto(creditRepository.getById(id));
     }
 
-    @Override
     public void deleteById(UUID id) {
         creditRepository.deleteById(id);
     }
 
-    @Override
     public void update(CreditDto creditDto) throws NoSuchEntityException {
         if (!creditRepository.existsById(creditDto.getId())) {
             throw new NoSuchEntityException("Credit with specified id does not exist");

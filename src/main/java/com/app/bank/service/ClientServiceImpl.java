@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class ClientServiceImpl implements EntityService<ClientDto> {
+public class ClientServiceImpl {
 
     private final ClientRepository clientRepository;
 
@@ -23,18 +23,15 @@ public class ClientServiceImpl implements EntityService<ClientDto> {
         this.clientRepository = clientRepository;
     }
 
-    @Override
     public UUID save(ClientDto clientDto) {
         return clientRepository.save(new Client(clientDto)).getId();
     }
 
-    @Override
     public List<ClientDto> getAll() {
         return clientRepository.findAll().stream()
                 .map(ClientDto::new).collect(Collectors.toList());
     }
 
-    @Override
     public ClientDto getById(UUID id) throws NoSuchEntityException {
         if (!clientRepository.existsById(id)) {
             throw new NoSuchEntityException("Client with specified id does not exist");
@@ -42,12 +39,10 @@ public class ClientServiceImpl implements EntityService<ClientDto> {
         return new ClientDto(clientRepository.getById(id));
     }
 
-    @Override
     public void deleteById(UUID id) {
         clientRepository.deleteById(id);
     }
 
-    @Override
     public void update(ClientDto clientDto) throws NoSuchEntityException {
         if (!clientRepository.existsById(clientDto.getId())) {
             throw new NoSuchEntityException("Client with specified id does not exist");
