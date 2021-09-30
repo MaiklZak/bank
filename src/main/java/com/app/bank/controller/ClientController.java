@@ -11,8 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
@@ -67,7 +69,15 @@ public class ClientController {
     }
 
     @PostMapping("/update")
-    public String updateClient(@ModelAttribute ClientDto clientDto) throws NoSuchEntityException {
+    public String updateClient(@Valid @ModelAttribute("client") ClientDto clientDto,
+                               BindingResult bindingResult,
+                               Model model) throws NoSuchEntityException {
+        if (bindingResult.hasErrors()) {
+            logger.info("Updating client failed");
+            model.addAttribute("client", clientDto);
+            model.addAttribute("failUpdate", true);
+            return "client/form";
+        }
         logger.info("Updating client with id: {}", clientDto.getId());
         clientService.update(clientDto);
         return REDIRECT_URL_CLIENT + clientDto.getId();
@@ -81,9 +91,16 @@ public class ClientController {
     }
 
     @PostMapping("/new")
-    public String saveNewClient(@ModelAttribute ClientDto clientDto) {
+    public String saveNewClient(@Valid @ModelAttribute("client") ClientDto client,
+                                BindingResult bindingResult,
+                                Model model) {
+        if (bindingResult.hasErrors()) {
+            logger.info("Saving client failed");
+            model.addAttribute("client", client);
+            return "client/form";
+        }
         logger.info("Saving new client");
-        UUID idOfSavedClient = clientService.save(clientDto);
+        UUID idOfSavedClient = clientService.save(client);
         return REDIRECT_URL_CLIENT + idOfSavedClient;
     }
 

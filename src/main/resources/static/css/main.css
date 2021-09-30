@@ -1,5 +1,5 @@
 #bodyMain {
-    background-image:linear-gradient(rgba(127, 134, 134, 0.78), rgba(119, 126, 82, 0.78)),url("/images/money.jpg");
+    background-image: linear-gradient(rgba(127, 134, 134, 0.78), rgba(119, 126, 82, 0.78)), url("/images/money.jpg");
     background-repeat: no-repeat;
     background-position: center center;
     background-attachment: fixed;
@@ -9,19 +9,25 @@
     background-size: cover;
 }
 
-#bodyClient {
-    background-image:linear-gradient(rgba(104, 110, 110, 0.78), rgba(94, 100, 65, 0.78)),url("/images/people.jpg");
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-attachment: fixed;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-    backdrop-filter: blur(2px);
+#bodyClient::before, #bodyClientForm::before {
+    content: '';
+    position: fixed; /* Фиксируем на одном месте */
+    left: 0; right: 0; /* Вся ширин */
+    top: 0; bottom: 0; /* Вся высота */
+    z-index: -1; /* Фон ниже текста */
+    background: linear-gradient(rgba(77, 82, 82, 0.78), rgba(74, 79, 51, 0.78)), url("/images/people.jpg") center / cover no-repeat;
+    filter: blur(3px); /* Размытие */
+}
+#bodyClient table, #bodyClientForm section {
     color: #ffffff;
 }
 
-#bodyClient table {
+#fullName, #phone, #email, #passport {
+    background: #5f676e;
+    /*border-color: #282e33;*/
     color: #ffffff;
+}
+
+.invalid-feedback {
+    color: rgb(255, 0, 0);
 }
