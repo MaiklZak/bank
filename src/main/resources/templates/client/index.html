@@ -5,20 +5,26 @@
     <title>Client</title>
     <th:block th:insert="fragments/common :: head"/>
 </head>
-<body>
+<body id="bodyClientIndex">
 <header th:insert="fragments/navbar :: navbar"></header>
 <section class="container mt-4">
-    <h2 class="text-right" th:text="${client.fullName}">Client</h2>
-    <a class="btn btn-secondary" th:href="@{'/clients/update/' + ${client.id}}">Edit client</a>
+    <div id="mesSuccess" th:if="${message}" class="alert alert-success text-center" role="alert" th:text="${message}">
+    </div>
+    <h2 class="text-right mt-5 mb-3" th:text="${client.fullName}">Client</h2>
+    <a class="btn btn-secondary mt-2" th:href="@{'/clients/update/' + ${client.id}}">Edit client</a>
 </section>
-<section class="container text-center">
-            <h3>Client's offers</h3>
+<section th:if="${offers.isEmpty()}" class="container text-center">
+    <h3 class="h3 mt-5">У клиента нет кредитов</h3>
+    <a class="btn btn-secondary mt-5" th:href="@{'/offers/new/' + ${client.id}}">Предложить кредит</a>
+</section>
+<section th:unless="${offers.isEmpty()}" class="container text-center">
+            <h3>Кредиты клиента</h3>
     <table class="table">
         <thead>
         <tr>
-            <th scope="col">Amount</th>
-            <th scope="col">Limit of credit</th>
-            <th scope="col">Interest rate of credit</th>
+            <th scope="col">Общая сумма</th>
+            <th scope="col"> Лимит кредита</th>
+            <th scope="col">Процентная ставка</th>
             <th scope="col"></th>
             <th scope="col"></th>
         </tr>
@@ -29,11 +35,11 @@
             <td th:text="${'₽' + offer.creditDto.limitOn}"></td>
             <td th:text="${offer.creditDto.interestRate + ' %'}"></td>
             <td><a class="btn btn-secondary" th:href="@{'/offers/' + ${offer.id}}">Edit</a></td>
-            <td><a class="btn btn-danger" th:href="@{'/offers/remove/' + ${offer.id}(clientId=${client.id})}">Remove</a></td>
+            <td><a class="btn btn-danger" th:href="@{'/offers/remove/' + ${offer.id}(clientId=${client.id})}">Удалить</a></td>
         </tr>
         </tbody>
     </table>
-    <a class="btn btn-secondary" th:href="@{'/offers/new/' + ${client.id}}">Add new offer</a>
+    <a class="btn btn-secondary" th:href="@{'/offers/new/' + ${client.id}}">Предложить кредит</a>
 </section>
 <th:block th:insert="fragments/common :: foot"/>
 </body>

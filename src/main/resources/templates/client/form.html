@@ -8,8 +8,12 @@
 <body id="bodyClientForm">
 <header th:insert="fragments/navbar :: navbar"></header>
 <section class="container text-center mt-5">
+    <nav th:if="${client.id}" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a id="linkBack" th:href="@{'/clients/' + ${client.id}}">Назад</a></li>
+        </ol>
+    </nav>
     <h2 class="h2 mt-5 mb-5">Клиент</h2>
-    <!--    <form method="post" th:action="@{/clients/update}" th:object="${client}">-->
     <form method="post" th:action="${client.id == null ? '/clients/new' : '/clients/update'}" th:object="${client}">
         <input type="hidden" th:field="*{id}">
         <div class="row justify-content-evenly">
@@ -56,13 +60,11 @@
         </div>
         <button type="submit" class="btn btn-success mt-5">Сохранить</button>
     </form>
-    <th:block th:if="${failUpdate}">
-        <div th:if="${client.id}">
-            <a th:href="@{'/clients/update/' + ${client.id}}" class="btn btn-info mt-4">Сбросить</a>
-        </div>
-    </th:block>
+    <div th:if="${client.id}" id="btnClear">
+        <a th:href="@{'/clients/update/' + ${client.id}}" class="btn btn-info mt-4">Сбросить</a>
+    </div>
     <div th:if="${client.id}">
-        <a th:href="@{'/clients/remove/' + ${client.id}}" class="btn btn-danger mt-4">Удалить</a>
+        <a th:href="@{'/clients/remove/' + ${client.id}}" class="btn btn-danger mt-4 mb-5">Удалить</a>
     </div>
 </section>
 <th:block th:insert="fragments/common :: foot"/>

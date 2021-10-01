@@ -5,26 +5,42 @@
     <title>Credit</title>
     <th:block th:insert="fragments/common :: head"/>
 </head>
-<body>
+<body id="bodyCreditForm">
 <header th:insert="fragments/navbar :: navbar"></header>
-<section class="container mx-auto">
-    <h2>Credit</h2>
+<section class="container text-center">
+    <nav th:if="${credit.id}" aria-label="breadcrumb">
+        <ol class="breadcrumb mt-5">
+            <li class="breadcrumb-item"><a id="linkBack" th:href="@{/credits/}">Назад</a></li>
+        </ol>
+    </nav>
+    <div id="mesSuccess" th:if="${message}" class="alert alert-success" role="alert" th:text="${message}">
+    </div>
+    <h2 class="h2 mt-5 mb-5">Кредит</h2>
     <form method="post" th:action="${credit.id == null ? '/credits/new' : '/credits/update'}" th:object="${credit}">
         <input type="hidden" th:field="*{id}">
-        <div class="row">
-            <div class="col-sm-2">
-                <label for="limit" class="form-label">Limit</label>
-                <input type="text" class="form-control" id="limit" th:field="*{limitOn}">
+        <div class="row row-cols-4 justify-content-md-center">
+            <div class="col">
+                <label for="limit" class="form-label">Лимит</label>
+                <input type="text" id="limit"
+                       th:class="${#fields.hasErrors('limitOn')} ? 'form-control is-invalid' : 'form-control'"
+                       th:field="*{limitOn}">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('limitOn')}" th:errors="*{limitOn}"></div>
             </div>
-            <div class="col-sm-2">
-                <label for="interestRate" class="form-label">Interest Rate</label>
-                <input type="text" class="form-control" id="interestRate" th:field="*{interestRate}">
+            <div class="col">
+                <label for="interestRate" class="form-label">Процентная ставка</label>
+                <input type="text" id="interestRate"
+                       th:class="${#fields.hasErrors('interestRate')} ? 'form-control is-invalid' : 'form-control'"
+                       th:field="*{interestRate}">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('interestRate')}" th:errors="*{interestRate}"></div>
             </div>
         </div>
-        <button type="submit" class="btn btn-primary mt-4">Save</button>
+        <button type="submit" class="btn btn-success mt-5">Сохранить</button>
     </form>
+    <div th:if="${credit.id}" id="btnClear">
+        <a th:href="@{'/credits/' + ${credit.id}}" class="btn btn-info mt-4">Сбросить</a>
+    </div>
     <div th:if="${credit.id}">
-        <a type="button" th:href="@{'/credits/remove/' + ${credit.id}}" class="btn btn-danger mt-4">Remove</a>
+        <a type="button" th:href="@{'/credits/remove/' + ${credit.id}}" class="btn btn-danger mt-4">Удалить</a>
     </div>
 </section>
 </body>

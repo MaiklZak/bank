@@ -92,4 +92,38 @@ $(document).ready((function () {
     /*-----------------------------Form client-------------------------------------------------------*/
     $('#phone').mask('+7 (999) 999-99-99');
     $('#passport').mask('99 99 999 999')
+    $('#btnClear').hide();
+    $('#bodyClientForm > section > form').change(function (){
+        $('#btnClear').show();
+    });
+    $('#mesSuccess').fadeOut(5000);
+
+    /*------------------------------Credit form------------------------------------------------------*/
+    function formatNum(num) {
+        let strNum = $(num);
+        strNum.val(strNum.val().replace('.', ''));
+
+        let suf = strNum.val().substring(strNum.val().length - 2);
+        let pre = strNum.val().substring(0, strNum.val().length - 2);
+
+        strNum.val(pre);
+        strNum.val(strNum.val().replace(/\s+/g, ''));
+        strNum.val(strNum.val().replace(/(\d{1,3})(?=((\d{3})*)$)/g, " $1"));
+        strNum.val(strNum.val().replace(/^\s/g, ''));
+        strNum.val(strNum.val() + '.' + suf);
+    }
+    let limitId = $('#limit');
+    limitId.bind('keyup', function () {
+        formatNum(limitId);
+    });
+
+    let inputRate = $('#interestRate');
+    if (inputRate.val().length === 4) {
+        inputRate.val('0' + inputRate.val());
+    }
+    inputRate.mask('99.99', {autoclear: false});
+
+    $('#bodyCreditForm > section > form').change(function (){
+        $('#btnClear').show();
+    });
 }));

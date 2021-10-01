@@ -29,7 +29,7 @@ public class CreditServiceImpl {
     }
 
     public List<CreditDto> getAll() {
-        return creditRepository.findAll(Sort.by("limitOn")).stream()
+        return creditRepository.findAll(Sort.by("limitOn", "interestRate")).stream()
                 .map(CreditDto::new)
                 .collect(Collectors.toList());
     }

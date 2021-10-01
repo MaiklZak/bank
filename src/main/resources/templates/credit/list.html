@@ -5,21 +5,21 @@
     <title>Credits</title>
     <th:block th:insert="fragments/common :: head"/>
 </head>
-<body>
+<body id="bodyCreditList">
 <header th:insert="fragments/navbar :: navbar"></header>
-<section class="container">
-    <h2>Credits</h2>
+<section class="container text-center">
+    <h2 class="h2 mt-5 mb-5">Кредиты</h2>
     <div class="row">
         <div class="col-sm-4" th:each="credit : ${credits}">
-            <div class="card text-center mt-2 mb-2">
+            <div class="card text-center mt-2 mb-2" id="creditCard">
                 <div class="card-body">
-                    <h5 class="card-title" th:text="${'Limit: ₽' + credit.limitOn}"></h5>
+                    <h5 class="card-title" th:text="${'Лимит: ₽ ' + credit.formatLimit}"></h5>
                     <hr/>
-                    <h6 class="card-title" th:text="${'Interest rate: ' + credit.interestRate + ' %'}">With supporting text below as a natural lead-in to additional content.</h6>
+                    <h6 class="card-title" th:text="${'Процентная ставка: ' + credit.interestRate + ' %'}"></h6>
                     <hr/>
                     <div>
-                    <a type="button" th:href="@{'/credits/' + ${credit.id}}" class="btn btn-secondary">Edit</a>
-                    <a type="button" th:href="@{'/credits/remove/' + ${credit.id}}" class="btn btn-danger">Remove</a>
+                    <a type="button" th:href="@{'/credits/' + ${credit.id}}" class="btn btn-secondary">Изменить</a>
+                    <a type="button" th:href="@{'/credits/remove/' + ${credit.id}}" class="btn btn-danger">Удалить</a>
                     </div>
                 </div>
             </div>

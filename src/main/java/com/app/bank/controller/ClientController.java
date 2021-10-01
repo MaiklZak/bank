@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -23,6 +24,7 @@ import java.util.UUID;
 public class ClientController {
 
     private static final String REDIRECT_URL_CLIENT = "redirect:/clients/";
+    private static final String CLIENT = "client";
 
     private final Logger logger = LoggerFactory.getLogger(ClientController.class);
 
@@ -38,7 +40,7 @@ public class ClientController {
 
     @GetMapping(produces = MediaType.TEXT_HTML_VALUE)
     public String getPageOfClientsList(Model model) {
-        logger.info("Getting all clients");
+        logger.info("Getting page all clients");
         List<ClientDto> clients = clientService.getPageOfClient(0, 20);
         model.addAttribute("clients", clients);
         return "client/list";
@@ -47,6 +49,7 @@ public class ClientController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<ClientDto> getPageOfClientsList(@RequestParam Integer offset, @RequestParam Integer limit) {
+        logger.info("Getting clients offset: {}, limit: {}", offset, limit);
         return clientService.getPageOfClient(offset, limit);
     }
 
@@ -55,7 +58,7 @@ public class ClientController {
         logger.info("Getting client with offers with id: {}", id);
         ClientDto clientDto = clientService.getById(id);
         List<OfferDto> offersByClientId = offerService.getByClientId(id);
-        model.addAttribute("client", clientDto);
+        model.addAttribute(CLIENT, clientDto);
         model.addAttribute("offers", offersByClientId);
         return "client/index";
     }
@@ -64,43 +67,46 @@ public class ClientController {
     public String getPageOfClientForEdit(@PathVariable UUID id, Model model) throws NoSuchEntityException {
         logger.info("Getting client for editing with id: {}", id);
         ClientDto clientDto = clientService.getById(id);
-        model.addAttribute("client", clientDto);
+        model.addAttribute(CLIENT, clientDto);
         return "client/form";
     }
 
     @PostMapping("/update")
     public String updateClient(@Valid @ModelAttribute("client") ClientDto clientDto,
                                BindingResult bindingResult,
-                               Model model) throws NoSuchEntityException {
+                               Model model,
+                               RedirectAttributes redirectAttributes) throws NoSuchEntityException {
         if (bindingResult.hasErrors()) {
             logger.info("Updating client failed");
-            model.addAttribute("client", clientDto);
-            model.addAttribute("failUpdate", true);
+            model.addAttribute(CLIENT, clientDto);
             return "client/form";
         }
         logger.info("Updating client with id: {}", clientDto.getId());
         clientService.update(clientDto);
+        redirectAttributes.addFlashAttribute("message", "Client successfully updated");
         return REDIRECT_URL_CLIENT + clientDto.getId();
     }
 
     @GetMapping("/new")
     public String getPageOfClientForCreate(Model model) {
         logger.info("Getting page for creating new client");
-        model.addAttribute("client", new ClientDto());
+        model.addAttribute(CLIENT, new ClientDto());
         return "client/form";
     }
 
     @PostMapping("/new")
     public String saveNewClient(@Valid @ModelAttribute("client") ClientDto client,
                                 BindingResult bindingResult,
-                                Model model) {
+                                Model model,
+                                RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             logger.info("Saving client failed");
-            model.addAttribute("client", client);
+            model.addAttribute(CLIENT, client);
             return "client/form";
         }
         logger.info("Saving new client");
         UUID idOfSavedClient = clientService.save(client);
+        redirectAttributes.addFlashAttribute("message", "Client successfully saved");
         return REDIRECT_URL_CLIENT + idOfSavedClient;
     }
 

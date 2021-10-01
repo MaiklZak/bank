@@ -8,8 +8,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.util.UUID;
 
 @Controller
@@ -50,9 +53,18 @@ public class CreditController {
     }
 
     @PostMapping("/new")
-    public String saveNewCredit(@ModelAttribute CreditDto creditDto) {
+    public String saveNewCredit(@Valid @ModelAttribute("credit") CreditDto creditDto,
+                                BindingResult bindingResult,
+                                Model model,
+                                RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            logger.info("Saving credit failed");
+            model.addAttribute("credit", creditDto);
+            return "credit/form";
+        }
         logger.info("Saving new credit");
         UUID idOfSavedCredit = creditService.save(creditDto);
+        redirectAttributes.addFlashAttribute("message", "Credit successfully saved");
         return REDIRECT_URL_CREDIT + idOfSavedCredit;
     }
 
@@ -64,9 +76,18 @@ public class CreditController {
     }
 
     @PostMapping("/update")
-    public String updateCredit(@ModelAttribute CreditDto creditDto) throws NoSuchEntityException {
+    public String updateCredit(@Valid @ModelAttribute("credit") CreditDto creditDto,
+                               BindingResult bindingResult,
+                               Model model,
+                               RedirectAttributes redirectAttributes) throws NoSuchEntityException {
+        if (bindingResult.hasErrors()) {
+            logger.info("Updating credit failed");
+            model.addAttribute("credit", creditDto);
+            return "credit/form";
+        }
         logger.info("Updating credit with id: {}", creditDto.getId());
         creditService.update(creditDto);
+        redirectAttributes.addFlashAttribute("message", "Credit successfully updated");
         return REDIRECT_URL_CREDIT + creditDto.getId();
     }
 }

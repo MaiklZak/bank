@@ -9,7 +9,7 @@
     background-size: cover;
 }
 
-#bodyClient::before, #bodyClientForm::before {
+#bodyClient::before, #bodyClientForm::before, #bodyClientIndex::before {
     content: '';
     position: fixed; /* Фиксируем на одном месте */
     left: 0; right: 0; /* Вся ширин */
@@ -18,16 +18,44 @@
     background: linear-gradient(rgba(77, 82, 82, 0.78), rgba(74, 79, 51, 0.78)), url("/images/people.jpg") center / cover no-repeat;
     filter: blur(3px); /* Размытие */
 }
-#bodyClient table, #bodyClientForm section {
+
+#bodyCreditList::before, #bodyCreditForm::before {
+    content: '';
+    position: fixed; /* Фиксируем на одном месте */
+    left: 0; right: 0; /* Вся ширин */
+    top: 0; bottom: 0; /* Вся высота */
+    z-index: -1; /* Фон ниже текста */
+    background: linear-gradient(rgba(77, 82, 82, 0.78), rgba(74, 79, 51, 0.78)), url("/images/schedule.jpg") center / cover no-repeat;
+    filter: blur(3px); /* Размытие */
+}
+
+#creditCard {
+    background: #4f5050;
     color: #ffffff;
 }
 
-#fullName, #phone, #email, #passport {
+#bodyClient table, #bodyClient .container, #bodyClientForm section, #bodyClientIndex, #bodyClientIndex table,  #bodyCreditList h2, #bodyCreditForm .container {
+    color: #ffffff;
+}
+
+#fullName, #phone, #email, #passport, #limit, #interestRate {
     background: #5f676e;
-    /*border-color: #282e33;*/
     color: #ffffff;
 }
 
 .invalid-feedback {
     color: rgb(255, 0, 0);
+}
+
+input {
+    text-align: center;
+}
+
+#mesSuccess {
+    position:fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    z-index:9999;
+    border-radius:0px
 }
