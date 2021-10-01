@@ -1,20 +1,15 @@
 package com.app.bank.entity;
 
-import org.hibernate.annotations.GenericGenerator;
-
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 @Entity
 @Table(name = "bank")
-public class Bank {
-
-    @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
-    private UUID id;
+public class Bank extends AbstractBaseEntity {
 
     @OneToMany()
     @JoinColumn(name = "client_id")
@@ -24,12 +19,7 @@ public class Bank {
     @JoinColumn(name = "credit_id")
     private Set<Credit> credits = new HashSet<>();
 
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
+    public Bank() {
     }
 
     public Set<Client> getClients() {

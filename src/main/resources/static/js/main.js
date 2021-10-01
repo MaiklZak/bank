@@ -1,33 +1,25 @@
 $(document).ready((function () {
     /*---------------------------------new/change offer page---------------------------------------*/
-    $('#tableSchedule').hide();
+
     function showCountYearsRange() {
         let countMonth = $('#customRange3').val();
         $('#labelRange').text('Срок кредита (лет): ' + (countMonth / 12));
     }
 
     showCountYearsRange();
-    $('#customRange3').change(function () {
+
+    $(document).on('input', '#customRange3', function () {
         showCountYearsRange();
     });
-    let creditAmount = $('#creditAmount');
+
     $('#selectCredit').change(function (e) {
-        let credit = $('#selectCredit :selected');
-        if (credit.val() !== 'not') {
-            let limit = credit.attr('limit');
-            let rate = credit.attr('rate');
-            let total = parseFloat(limit) * parseFloat(rate) / 100 + parseFloat(limit);
-            creditAmount.val('₽' + total.toFixed(2));
-            $('#creditAmountHidden').val(total.toFixed(2));
-        } else {
-            e.preventDefault();
-        }
         $('#defaultOption').hide();
     });
 
     $('#computeSchedule').click(function () {
         $('#tableSchedule tbody').empty();
-        $('#tableSchedule').show();
+        $('#tableSchedule').removeAttr('hidden');
+        $('#formAmount').removeAttr('hidden');
         $.ajax({
             url: '/schedule',
             type: 'GET',
@@ -40,7 +32,9 @@ $(document).ready((function () {
             },
             success: function (data) {
                 var rows = '';
+                let sumAmount = 0;
                 data.forEach(function (schedule) {
+                    sumAmount += schedule.amountPayment;
                     rows = rows + '<tr>' +
                         '<td>' + schedule.dateFormat + '</td>' +
                         '<td>' + '₽ ' + schedule.amountPayment + '</td>' +
@@ -49,6 +43,7 @@ $(document).ready((function () {
                         '</tr>'
                 });
                 $('#tableSchedule').append(rows);
+                $('#creditAmount').val(Math.ceil(sumAmount) + ' руб.');
             }
         });
     });
@@ -93,7 +88,7 @@ $(document).ready((function () {
     $('#phone').mask('+7 (999) 999-99-99');
     $('#passport').mask('99 99 999 999')
     $('#btnClear').hide();
-    $('#bodyClientForm > section > form').change(function (){
+    $('#bodyClientForm > section > form').change(function () {
         $('#btnClear').show();
     });
     $('#mesSuccess').fadeOut(5000);
@@ -112,6 +107,7 @@ $(document).ready((function () {
         strNum.val(strNum.val().replace(/^\s/g, ''));
         strNum.val(strNum.val() + '.' + suf);
     }
+
     let limitId = $('#limit');
     limitId.bind('keyup', function () {
         formatNum(limitId);
@@ -123,7 +119,7 @@ $(document).ready((function () {
     }
     inputRate.mask('99.99', {autoclear: false});
 
-    $('#bodyCreditForm > section > form').change(function (){
+    $('#bodyCreditForm > section > form').change(function () {
         $('#btnClear').show();
     });
 }));

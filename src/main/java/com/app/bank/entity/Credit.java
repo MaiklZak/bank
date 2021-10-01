@@ -1,20 +1,15 @@
 package com.app.bank.entity;
 
 import com.app.bank.dto.CreditDto;
-import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.math.BigDecimal;
-import java.util.UUID;
 
 @Entity
 @Table(name = "credit")
-public class Credit {
-
-    @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
-    private UUID id;
+public class Credit extends AbstractBaseEntity {
 
     @Column(name = "limit_on")
     private BigDecimal limitOn;
@@ -26,17 +21,9 @@ public class Credit {
     }
 
     public Credit(CreditDto creditDto) {
-        this.id = creditDto.getId();
+        super(creditDto.getId());
         this.limitOn = creditDto.getLimitOn();
         this.interestRate = creditDto.getInterestRate();
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
     }
 
     public BigDecimal getLimitOn() {

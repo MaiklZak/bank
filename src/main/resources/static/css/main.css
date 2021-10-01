@@ -1,5 +1,5 @@
 #bodyMain {
-    background-image: linear-gradient(rgba(127, 134, 134, 0.78), rgba(119, 126, 82, 0.78)), url("/images/money.jpg");
+    background-image: linear-gradient(rgba(104, 110, 110, 0.78), rgba(97, 105, 68, 0.78)), url("/images/money.jpg");
     background-repeat: no-repeat;
     background-position: center center;
     background-attachment: fixed;
@@ -29,16 +29,28 @@
     filter: blur(3px); /* Размытие */
 }
 
+#bodyOffer::before {
+    content: '';
+    position: fixed; /* Фиксируем на одном месте */
+    left: 0; right: 0; /* Вся ширин */
+    top: 0; bottom: 0; /* Вся высота */
+    z-index: -1; /* Фон ниже текста */
+    background: linear-gradient(rgba(77, 82, 82, 0.78), rgba(74, 79, 51, 0.78)), url("/images/offer.jpg") center / cover no-repeat;
+    filter: blur(3px); /* Размытие */
+}
+
 #creditCard {
     background: #4f5050;
     color: #ffffff;
 }
 
-#bodyClient table, #bodyClient .container, #bodyClientForm section, #bodyClientIndex, #bodyClientIndex table,  #bodyCreditList h2, #bodyCreditForm .container {
+#bodyClient table, #bodyClient .container, #bodyClientForm section,
+#bodyClientIndex, #bodyClientIndex table,  #bodyCreditList h2,
+#bodyCreditForm .container, #bodyMain > section > h1, #bodyOffer section, #tableSchedule {
     color: #ffffff;
 }
 
-#fullName, #phone, #email, #passport, #limit, #interestRate {
+#fullName, #phone, #email, #passport, #limit, #interestRate, #selectCredit, #selectDate, #creditAmount {
     background: #5f676e;
     color: #ffffff;
 }
@@ -53,7 +65,7 @@ input {
 
 #mesSuccess {
     position:fixed;
-    top: 0px;
+    top: 50px;
     left: 0px;
     width: 100%;
     z-index:9999;

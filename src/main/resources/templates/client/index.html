@@ -10,8 +10,8 @@
 <section class="container mt-4">
     <div id="mesSuccess" th:if="${message}" class="alert alert-success text-center" role="alert" th:text="${message}">
     </div>
-    <h2 class="text-right mt-5 mb-3" th:text="${client.fullName}">Client</h2>
-    <a class="btn btn-secondary mt-2" th:href="@{'/clients/update/' + ${client.id}}">Edit client</a>
+    <h2 class="text-right mt-5 mb-3" th:text="${client.fullName}">Клиент</h2>
+    <a class="btn btn-secondary mt-2" th:href="@{'/clients/update/' + ${client.id}}">Редактировать</a>
 </section>
 <section th:if="${offers.isEmpty()}" class="container text-center">
     <h3 class="h3 mt-5">У клиента нет кредитов</h3>
@@ -34,7 +34,7 @@
             <td th:text="${'₽' + offer.amount}"></td>
             <td th:text="${'₽' + offer.creditDto.limitOn}"></td>
             <td th:text="${offer.creditDto.interestRate + ' %'}"></td>
-            <td><a class="btn btn-secondary" th:href="@{'/offers/' + ${offer.id}}">Edit</a></td>
+            <td><a class="btn btn-secondary" th:href="@{'/offers/' + ${offer.id}}">Изменить</a></td>
             <td><a class="btn btn-danger" th:href="@{'/offers/remove/' + ${offer.id}(clientId=${client.id})}">Удалить</a></td>
         </tr>
         </tbody>

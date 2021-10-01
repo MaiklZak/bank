@@ -1,21 +1,14 @@
 package com.app.bank.entity;
 
 import com.app.bank.dto.SchedulePaymentDto;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.UUID;
 
 @Entity
 @Table(name = "schedule_payment")
-public class SchedulePayment {
-
-    @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
-    private UUID id;
+public class SchedulePayment extends AbstractBaseEntity {
 
     @Column(name = "date_payment")
     private Date datePayment;
@@ -41,14 +34,6 @@ public class SchedulePayment {
         this.amountPayment = schedulePaymentDto.getAmountPayment();
         this.bodyRepayment = schedulePaymentDto.getBodyRepayment();
         this.interestRepayment = schedulePaymentDto.getInterestRepayment();
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
     }
 
     public Date getDatePayment() {

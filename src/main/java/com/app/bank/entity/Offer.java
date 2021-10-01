@@ -1,21 +1,13 @@
 package com.app.bank.entity;
 
-import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 @Entity
 @Table(name = "offer")
-public class Offer {
-
-    @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
-    private UUID id;
+public class Offer extends AbstractBaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "client_id")
@@ -37,14 +29,6 @@ public class Offer {
         this.client = client;
         this.credit = credit;
         this.amount = amount;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
     }
 
     public Client getClient() {

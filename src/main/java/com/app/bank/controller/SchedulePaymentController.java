@@ -1,6 +1,7 @@
 package com.app.bank.controller;
 
 import com.app.bank.dto.SchedulePaymentDto;
+import com.app.bank.error.InvalidFieldsException;
 import com.app.bank.service.SchedulePaymentServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,7 +27,10 @@ public class SchedulePaymentController {
     public List<SchedulePaymentDto> getScheduleDtoList(@RequestParam BigDecimal amountCredit,
                                                        @RequestParam BigDecimal interestRate,
                                                        @RequestParam Integer countMonth,
-                                                       @RequestParam Integer datePayment) {
+                                                       @RequestParam Integer datePayment) throws InvalidFieldsException {
+        if (amountCredit == null || interestRate == null || countMonth == null || datePayment == null) {
+            throw new InvalidFieldsException("Fields for calculating schedule are not filled in");
+        }
         BigDecimal paymentMonth = schedulePaymentService.computeMonthlyPayment(amountCredit, interestRate, countMonth);
         return schedulePaymentService.generateSchedule(amountCredit, paymentMonth, interestRate, countMonth, datePayment);
     }

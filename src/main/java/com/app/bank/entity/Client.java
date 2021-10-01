@@ -1,19 +1,14 @@
 package com.app.bank.entity;
 
 import com.app.bank.dto.ClientDto;
-import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.*;
-import java.util.UUID;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "client")
-public class Client {
-
-    @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
-    private UUID id;
+public class Client extends AbstractBaseEntity {
 
     @Column(name = "full_name")
     private String fullName;
@@ -28,19 +23,11 @@ public class Client {
     }
 
     public Client(ClientDto clientDto) {
-        this.id = clientDto.getId();
+        super(clientDto.getId());
         this.fullName = clientDto.getFullName();
         this.phone = clientDto.getPhone();
         this.email = clientDto.getEmail();
         this.passport = clientDto.getPassport();
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
     }
 
     public String getFullName() {
