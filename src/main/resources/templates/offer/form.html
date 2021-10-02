@@ -26,13 +26,13 @@
                             th:if="${offer.creditDto != null}"
                             th:value="${offer.creditDto.id}"
                             th:attr="limit=${offer.creditDto.limitOn},rate=${offer.creditDto.interestRate}"
-                            th:text="${'₽' + offer.creditDto.limitOn + ' - ' + offer.creditDto.interestRate + '%' + ' current'}">
+                            th:text="${'₽' + offer.creditDto.formatLimit() + ' - ' + offer.creditDto.interestRate + '%' + ' current'}">
                     </option>
                     <th:block th:each="credit : ${credits}">
                         <option th:if="${offer.creditDto == null or offer.creditDto.id != credit.id}"
                                 th:value="${credit.id}"
                                 th:attr="limit=${credit.limitOn},rate=${credit.interestRate}"
-                                th:text="${'₽' + credit.limitOn + ' - ' + credit.interestRate + '%'}">
+                                th:text="${'₽' + credit.formatLimit() + ' - ' + credit.interestRate + '%'}">
                         </option>
                     </th:block>
                 </select>

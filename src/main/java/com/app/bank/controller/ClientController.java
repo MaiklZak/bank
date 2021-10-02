@@ -111,9 +111,10 @@ public class ClientController {
     }
 
     @GetMapping("/remove/{id}")
-    public String removeClientById(@PathVariable UUID id) {
+    public String removeClientById(@PathVariable UUID id, RedirectAttributes redirectAttributes) {
         logger.info("Removing client with id: {}", id);
         clientService.deleteById(id);
-        return REDIRECT_URL_CLIENT + id;
+        redirectAttributes.addFlashAttribute("message", "Client successfully removed");
+        return REDIRECT_URL_CLIENT;
     }
 }

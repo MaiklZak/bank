@@ -69,10 +69,11 @@ public class CreditController {
     }
 
     @GetMapping("/remove/{id}")
-    public String removeCreditById(@PathVariable UUID id) {
+    public String removeCreditById(@PathVariable UUID id, RedirectAttributes redirectAttributes) {
         logger.info("Removing credit with id: {}", id);
         creditService.deleteById(id);
-        return REDIRECT_URL_CREDIT + id;
+        redirectAttributes.addFlashAttribute("message", "Credit successfully removed");
+        return REDIRECT_URL_CREDIT;
     }
 
     @PostMapping("/update")

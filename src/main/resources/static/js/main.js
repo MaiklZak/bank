@@ -12,10 +12,6 @@ $(document).ready((function () {
         showCountYearsRange();
     });
 
-    $('#selectCredit').change(function (e) {
-        $('#defaultOption').hide();
-    });
-
     $('#computeSchedule').click(function () {
         $('#tableSchedule tbody').empty();
         $('#tableSchedule').removeAttr('hidden');

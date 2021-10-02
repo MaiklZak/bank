@@ -8,6 +8,8 @@
 <body id="bodyClient">
 <header th:insert="fragments/navbar :: navbar"></header>
 <section class="container text-center mb-4">
+    <div id="mesSuccess" th:if="${message}" class="alert alert-success text-center" role="alert" th:text="${message}">
+    </div>
     <h2 class="h1 mt-5 mb-5">Клиенты</h2>
     <table class="table" id="tableClients">
         <thead>

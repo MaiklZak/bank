@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>404</title>
+    <th:block th:insert="fragments/common :: head"/>
+</head>
+<body>
+<header th:insert="fragments/navbar :: navbar"></header>
+<section class="container-sm text-center">
+    <h1 class="h1 mt-5 mb-5">Not Found</h1>
+    <h3 th:text="${error}"></h3>
+</section>
+<th:block th:insert="fragments/common :: foot"/>
+</body>
+</html>

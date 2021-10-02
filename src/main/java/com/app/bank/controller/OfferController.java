@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -63,12 +64,12 @@ public class OfferController {
     }
 
     @PostMapping({"/new", "/update"})
-    public String saveNewOffer(@ModelAttribute OfferDto offerDto,
-                               @RequestParam UUID creditId,
-                               @RequestParam UUID clientId,
-                               @RequestParam Integer countMonth,
-                               @RequestParam Integer datePayment) throws NoSuchEntityException, InvalidFieldsException {
-        logger.info("Saving new offer");
+    public String saveUpdateNewOffer(@ModelAttribute OfferDto offerDto,
+                                     @RequestParam UUID creditId,
+                                     @RequestParam UUID clientId,
+                                     @RequestParam Integer countMonth,
+                                     @RequestParam Integer datePayment,
+                                     RedirectAttributes redirectAttributes) throws NoSuchEntityException, InvalidFieldsException {
         CreditDto creditDto = creditService.getById(creditId);
         ClientDto clientDto = clientService.getById(clientId);
         offerDto.setCreditDto(creditDto);
@@ -83,17 +84,22 @@ public class OfferController {
                 .generateSchedule(creditDto.getLimitOn(), paymentMonth, creditDto.getInterestRate(), countMonth, datePayment);
 
         if (offerDto.getId() == null) {
+            logger.info("Saving new offer");
             offerService.save(offerDto, scheduleDtoList);
+            redirectAttributes.addFlashAttribute("message", "Offer successfully created");
         } else {
+            logger.info("Updating new offer");
             offerService.update(offerDto, scheduleDtoList);
+            redirectAttributes.addFlashAttribute("message", "Offer successfully updated");
         }
         return "redirect:/clients/" + clientId;
     }
 
     @GetMapping("/remove/{id}")
-    public String removeOfferById(@PathVariable UUID id, @RequestParam UUID clientId) {
+    public String removeOfferById(@PathVariable UUID id, @RequestParam UUID clientId, RedirectAttributes redirectAttributes) {
         logger.info("Removing offer with id: {}", id);
         offerService.deleteById(id);
+        redirectAttributes.addFlashAttribute("message", "Offer successfully removed");
         return "redirect:/clients/" + clientId;
     }
 }
