@@ -28,6 +28,8 @@ public class OfferController {
 
     private final Logger logger = LoggerFactory.getLogger(OfferController.class);
 
+    private static final String MESSAGE = "message";
+
     private final OfferServiceImpl offerService;
     private final CreditServiceImpl creditService;
     private final ClientServiceImpl clientService;
@@ -86,11 +88,11 @@ public class OfferController {
         if (offerDto.getId() == null) {
             logger.info("Saving new offer");
             offerService.save(offerDto, scheduleDtoList);
-            redirectAttributes.addFlashAttribute("message", "Offer successfully created");
+            redirectAttributes.addFlashAttribute(MESSAGE, "Offer successfully created");
         } else {
             logger.info("Updating new offer");
             offerService.update(offerDto, scheduleDtoList);
-            redirectAttributes.addFlashAttribute("message", "Offer successfully updated");
+            redirectAttributes.addFlashAttribute(MESSAGE, "Offer successfully updated");
         }
         return "redirect:/clients/" + clientId;
     }
@@ -99,7 +101,7 @@ public class OfferController {
     public String removeOfferById(@PathVariable UUID id, @RequestParam UUID clientId, RedirectAttributes redirectAttributes) {
         logger.info("Removing offer with id: {}", id);
         offerService.deleteById(id);
-        redirectAttributes.addFlashAttribute("message", "Offer successfully removed");
+        redirectAttributes.addFlashAttribute(MESSAGE, "Offer successfully removed");
         return "redirect:/clients/" + clientId;
     }
 }

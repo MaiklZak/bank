@@ -19,9 +19,6 @@ public class Bank extends AbstractBaseEntity {
     @JoinColumn(name = "credit_id")
     private Set<Credit> credits = new HashSet<>();
 
-    public Bank() {
-    }
-
     public Set<Client> getClients() {
         return clients;
     }

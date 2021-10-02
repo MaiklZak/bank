@@ -11,6 +11,8 @@ import com.app.bank.error.NoSuchEntityException;
 import com.app.bank.repository.ClientRepository;
 import com.app.bank.repository.CreditRepository;
 import com.app.bank.repository.OfferRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +26,8 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class OfferServiceImpl {
+
+    private final Logger logger = LoggerFactory.getLogger(OfferServiceImpl.class);
 
     private final OfferRepository offerRepository;
     private final ClientRepository clientRepository;
@@ -40,6 +44,7 @@ public class OfferServiceImpl {
     }
 
     public UUID save(OfferDto offerDto, List<SchedulePaymentDto> scheduleDtoList) throws InvalidFieldsException {
+        logger.info("Saving offer");
         Optional<Client> clientById = clientRepository.findById(offerDto.getClientDto().getId());
         Optional<Credit> creditById = creditRepository.findById(offerDto.getCreditDto().getId());
         if (clientById.isEmpty() || creditById.isEmpty() || offerDto.getAmount() == null) {
@@ -88,7 +93,8 @@ public class OfferServiceImpl {
     }
 
     public List<OfferDto> getByClientId(UUID clientId) {
-        return offerRepository.findByClient_Id(clientId).stream()
+        logger.info("Getting offers by client with id: {}", clientId);
+        return offerRepository.findByClientId(clientId).stream()
                 .map(OfferDto::new)
                 .collect(Collectors.toList());
     }

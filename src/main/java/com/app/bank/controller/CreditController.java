@@ -20,6 +20,9 @@ import java.util.UUID;
 public class CreditController {
 
     private static final String REDIRECT_URL_CREDIT = "redirect:/credits/";
+    private static final String CREDIT = "credit";
+    private static final String CREDIT_FORM_URL = "credit/form";
+    private static final String MESSAGE = "message";
 
     private final Logger logger = LoggerFactory.getLogger(CreditController.class);
 
@@ -41,15 +44,15 @@ public class CreditController {
     public String getPageOfCredit(@PathVariable UUID id, Model model) throws NoSuchEntityException {
         logger.info("Getting credit with id: {}", id);
         CreditDto creditById = creditService.getById(id);
-        model.addAttribute("credit", creditById);
-        return "credit/form";
+        model.addAttribute(CREDIT, creditById);
+        return CREDIT_FORM_URL;
     }
 
     @GetMapping("/new")
     public String getPageOfCredit(Model model) {
         logger.info("Getting page for creating new credit");
-        model.addAttribute("credit", new CreditDto());
-        return "credit/form";
+        model.addAttribute(CREDIT, new CreditDto());
+        return CREDIT_FORM_URL;
     }
 
     @PostMapping("/new")
@@ -59,12 +62,12 @@ public class CreditController {
                                 RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             logger.info("Saving credit failed");
-            model.addAttribute("credit", creditDto);
-            return "credit/form";
+            model.addAttribute(CREDIT, creditDto);
+            return CREDIT_FORM_URL;
         }
         logger.info("Saving new credit");
         UUID idOfSavedCredit = creditService.save(creditDto);
-        redirectAttributes.addFlashAttribute("message", "Credit successfully saved");
+        redirectAttributes.addFlashAttribute(MESSAGE, "Credit successfully saved");
         return REDIRECT_URL_CREDIT + idOfSavedCredit;
     }
 
@@ -72,7 +75,7 @@ public class CreditController {
     public String removeCreditById(@PathVariable UUID id, RedirectAttributes redirectAttributes) {
         logger.info("Removing credit with id: {}", id);
         creditService.deleteById(id);
-        redirectAttributes.addFlashAttribute("message", "Credit successfully removed");
+        redirectAttributes.addFlashAttribute(MESSAGE, "Credit successfully removed");
         return REDIRECT_URL_CREDIT;
     }
 
@@ -83,12 +86,12 @@ public class CreditController {
                                RedirectAttributes redirectAttributes) throws NoSuchEntityException {
         if (bindingResult.hasErrors()) {
             logger.info("Updating credit failed");
-            model.addAttribute("credit", creditDto);
-            return "credit/form";
+            model.addAttribute(CREDIT, creditDto);
+            return CREDIT_FORM_URL;
         }
         logger.info("Updating credit with id: {}", creditDto.getId());
         creditService.update(creditDto);
-        redirectAttributes.addFlashAttribute("message", "Credit successfully updated");
+        redirectAttributes.addFlashAttribute(MESSAGE, "Credit successfully updated");
         return REDIRECT_URL_CREDIT + creditDto.getId();
     }
 }

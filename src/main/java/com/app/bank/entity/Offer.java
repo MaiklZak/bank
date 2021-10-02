@@ -19,8 +19,11 @@ public class Offer extends AbstractBaseEntity {
 
     private BigDecimal amount;
 
-    @OneToMany(mappedBy = "offer")
+    @OneToMany(mappedBy = "offer", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<SchedulePayment> schedulePayments = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private Set<Offer> offers = new HashSet<>();
 
     public Offer() {
     }
@@ -61,5 +64,13 @@ public class Offer extends AbstractBaseEntity {
 
     public void setSchedulePayments(Set<SchedulePayment> schedulePayments) {
         this.schedulePayments = schedulePayments;
+    }
+
+    public Set<Offer> getOffers() {
+        return offers;
+    }
+
+    public void setOffers(Set<Offer> offers) {
+        this.offers = offers;
     }
 }

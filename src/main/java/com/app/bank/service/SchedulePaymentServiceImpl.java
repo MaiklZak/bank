@@ -4,6 +4,8 @@ import com.app.bank.dto.SchedulePaymentDto;
 import com.app.bank.entity.Offer;
 import com.app.bank.entity.SchedulePayment;
 import com.app.bank.repository.SchedulePaymentRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +21,8 @@ import java.util.stream.Collectors;
 @Transactional
 public class SchedulePaymentServiceImpl {
 
+    private Logger logger = LoggerFactory.getLogger(SchedulePaymentServiceImpl.class);
+
     private final SchedulePaymentRepository schedulePaymentRepository;
 
     @Autowired
@@ -27,6 +31,7 @@ public class SchedulePaymentServiceImpl {
     }
 
     public Set<SchedulePayment> generateScheduleForOffer(Offer offer, List<SchedulePaymentDto> scheduleDtoList) {
+        logger.info("Generate schedule for offer");
         return scheduleDtoList.stream()
                 .map(SchedulePayment::new)
                 .map(schedulePayment -> {

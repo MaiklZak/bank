@@ -2,9 +2,9 @@ package com.app.bank.entity;
 
 import com.app.bank.dto.ClientDto;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "client")
@@ -18,6 +18,9 @@ public class Client extends AbstractBaseEntity {
     private String email;
 
     private String passport;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private Set<Offer> offers = new HashSet<>();
 
     public Client() {
     }
@@ -60,5 +63,13 @@ public class Client extends AbstractBaseEntity {
 
     public void setPassport(String passport) {
         this.passport = passport;
+    }
+
+    public Set<Offer> getOffers() {
+        return offers;
+    }
+
+    public void setOffers(Set<Offer> offers) {
+        this.offers = offers;
     }
 }

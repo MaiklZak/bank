@@ -46,7 +46,8 @@
 
 #bodyClient table, #bodyClient .container, #bodyClientForm section,
 #bodyClientIndex, #bodyClientIndex table,  #bodyCreditList h2,
-#bodyCreditForm .container, #bodyMain > section > h1, #bodyOffer section, #tableSchedule {
+#bodyCreditForm .container, #bodyMain > section > h1, #bodyOffer section,
+#tableSchedule {
     color: #ffffff;
 }
 
@@ -70,4 +71,8 @@ input {
     width: 100%;
     z-index:9999;
     border-radius:0px
+}
+
+.modal-body {
+    color: #1a1e21;
 }

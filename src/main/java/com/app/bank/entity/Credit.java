@@ -2,10 +2,10 @@ package com.app.bank.entity;
 
 import com.app.bank.dto.CreditDto;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "credit")
@@ -16,6 +16,9 @@ public class Credit extends AbstractBaseEntity {
 
     @Column(name = "interest_rate")
     private BigDecimal interestRate;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private Set<Offer> offers = new HashSet<>();
 
     public Credit() {
     }
@@ -40,5 +43,13 @@ public class Credit extends AbstractBaseEntity {
 
     public void setInterestRate(BigDecimal interestRate) {
         this.interestRate = interestRate;
+    }
+
+    public Set<Offer> getOffers() {
+        return offers;
+    }
+
+    public void setOffers(Set<Offer> offers) {
+        this.offers = offers;
     }
 }

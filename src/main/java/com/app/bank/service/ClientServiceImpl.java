@@ -4,6 +4,8 @@ import com.app.bank.dto.ClientDto;
 import com.app.bank.entity.Client;
 import com.app.bank.error.NoSuchEntityException;
 import com.app.bank.repository.ClientRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +19,8 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class ClientServiceImpl {
+
+    private final Logger logger = LoggerFactory.getLogger(ClientServiceImpl.class);
 
     private final ClientRepository clientRepository;
 
@@ -44,6 +48,7 @@ public class ClientServiceImpl {
     }
 
     public ClientDto getById(UUID id) throws NoSuchEntityException {
+        logger.info("Getting client with id: {}", id);
         if (!clientRepository.existsById(id)) {
             throw new NoSuchEntityException("Client with specified id does not exist");
         }

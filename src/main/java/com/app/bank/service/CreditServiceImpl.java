@@ -4,6 +4,8 @@ import com.app.bank.dto.CreditDto;
 import com.app.bank.entity.Credit;
 import com.app.bank.error.NoSuchEntityException;
 import com.app.bank.repository.CreditRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,8 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class CreditServiceImpl {
+
+    private final Logger logger = LoggerFactory.getLogger(CreditServiceImpl.class);
 
     private final CreditRepository creditRepository;
 
@@ -35,6 +39,7 @@ public class CreditServiceImpl {
     }
 
     public CreditDto getById(UUID id) throws NoSuchEntityException {
+        logger.info("Getting credit with id: {}", id);
         if (!creditRepository.existsById(id)) {
             throw new NoSuchEntityException("Credit with specified id does not exist");
         }

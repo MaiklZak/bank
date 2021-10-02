@@ -25,6 +25,8 @@ public class ClientController {
 
     private static final String REDIRECT_URL_CLIENT = "redirect:/clients/";
     private static final String CLIENT = "client";
+    private static final String CLIENT_FORM_URL = "client/form";
+    private static final String MESSAGE = "message";
 
     private final Logger logger = LoggerFactory.getLogger(ClientController.class);
 
@@ -68,7 +70,7 @@ public class ClientController {
         logger.info("Getting client for editing with id: {}", id);
         ClientDto clientDto = clientService.getById(id);
         model.addAttribute(CLIENT, clientDto);
-        return "client/form";
+        return CLIENT_FORM_URL;
     }
 
     @PostMapping("/update")
@@ -79,11 +81,11 @@ public class ClientController {
         if (bindingResult.hasErrors()) {
             logger.info("Updating client failed");
             model.addAttribute(CLIENT, clientDto);
-            return "client/form";
+            return CLIENT_FORM_URL;
         }
         logger.info("Updating client with id: {}", clientDto.getId());
         clientService.update(clientDto);
-        redirectAttributes.addFlashAttribute("message", "Client successfully updated");
+        redirectAttributes.addFlashAttribute(MESSAGE, "Client successfully updated");
         return REDIRECT_URL_CLIENT + clientDto.getId();
     }
 
@@ -91,7 +93,7 @@ public class ClientController {
     public String getPageOfClientForCreate(Model model) {
         logger.info("Getting page for creating new client");
         model.addAttribute(CLIENT, new ClientDto());
-        return "client/form";
+        return CLIENT_FORM_URL;
     }
 
     @PostMapping("/new")
@@ -102,11 +104,11 @@ public class ClientController {
         if (bindingResult.hasErrors()) {
             logger.info("Saving client failed");
             model.addAttribute(CLIENT, client);
-            return "client/form";
+            return CLIENT_FORM_URL;
         }
         logger.info("Saving new client");
         UUID idOfSavedClient = clientService.save(client);
-        redirectAttributes.addFlashAttribute("message", "Client successfully saved");
+        redirectAttributes.addFlashAttribute(MESSAGE, "Client successfully saved");
         return REDIRECT_URL_CLIENT + idOfSavedClient;
     }
 
@@ -114,7 +116,7 @@ public class ClientController {
     public String removeClientById(@PathVariable UUID id, RedirectAttributes redirectAttributes) {
         logger.info("Removing client with id: {}", id);
         clientService.deleteById(id);
-        redirectAttributes.addFlashAttribute("message", "Client successfully removed");
+        redirectAttributes.addFlashAttribute(MESSAGE, "Client successfully removed");
         return REDIRECT_URL_CLIENT;
     }
 }

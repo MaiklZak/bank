@@ -89,6 +89,7 @@ $(document).ready((function () {
     });
     $('#mesSuccess').fadeOut(5000);
 
+
     /*------------------------------Credit form------------------------------------------------------*/
     function formatNum(num) {
         let strNum = $(num);
