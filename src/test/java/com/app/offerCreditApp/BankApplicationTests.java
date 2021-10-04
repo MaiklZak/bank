@@ -1,13 +1,21 @@
 package com.app.offerCreditApp;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.beans.factory.annotation.Autowired;
 
-@SpringBootTest
-class BankApplicationTests {
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+class BankApplicationTests extends AbstractTest {
+
+	private final BankApplication application;
+
+	@Autowired
+	BankApplicationTests(BankApplication application) {
+		this.application = application;
+	}
 
 	@Test
 	void contextLoads() {
+		assertNotNull(application);
 	}
-
 }

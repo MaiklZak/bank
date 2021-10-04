@@ -38,7 +38,8 @@ public class ClientDto {
         this.passport = client.getPassport();
     }
 
-    public ClientDto(String fullName, String phone, String email, String passport) {
+    public ClientDto(UUID id, String fullName, String phone, String email, String passport) {
+        this.id = id;
         this.fullName = fullName;
         this.phone = phone;
         this.email = email;

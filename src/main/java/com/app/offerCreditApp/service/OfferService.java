@@ -38,7 +38,6 @@ public class OfferService {
     public OfferService(OfferRepository offerRepository, ClientRepository clientRepository, CreditRepository creditRepository, SchedulePaymentService schedulePaymentService) {
         this.offerRepository = offerRepository;
         this.clientRepository = clientRepository;
-
         this.creditRepository = creditRepository;
         this.schedulePaymentService = schedulePaymentService;
     }
@@ -57,12 +56,6 @@ public class OfferService {
         offer.setSchedulePayments(schedulePayments);
 
         return offerRepository.save(offer).getId();
-    }
-
-    public List<OfferDto> getAll() {
-        return offerRepository.findAll().stream()
-                .map(OfferDto::new)
-                .collect(Collectors.toList());
     }
 
     public OfferDto getById(UUID id) throws NoSuchEntityException {

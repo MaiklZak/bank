@@ -33,6 +33,12 @@ public class CreditDto {
         this.interestRate = credit.getInterestRate();
     }
 
+    public CreditDto(UUID id, BigDecimal limitOn, BigDecimal interestRate) {
+        this.id = id;
+        this.limitOn = limitOn;
+        this.interestRate = interestRate;
+    }
+
     @JsonProperty("formatLimit")
     public String formatLimit() {
         return new DecimalFormat( "#,###,###,###.00" ).format(limitOn);
