@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8"/>
     <title>Offer</title>
     <th:block th:insert="fragments/common :: head"/>
 </head>
@@ -15,9 +15,9 @@
     </nav>
     <h2 class="h2 mb-5" th:text="${'Предложение для: ' + offer.clientDto.fullName}"></h2>
     <form method="post" th:action="${offer.id == null ? '/offers/new' : '/offers/update'}" th:object="${offer}">
-        <input type="hidden" th:field="*{id}">
+        <input type="hidden" th:field="*{id}"/>
         <!--        <input type="hidden" class="form-control" id="creditAmountHidden" name="amount" th:field="*{amount}">-->
-        <input type="hidden" name="clientId" th:value="${offer.clientDto.id}">
+        <input type="hidden" name="clientId" th:value="${offer.clientDto.id}"/>
         <div class="row gy-2 gx-3 justify-content-md-center mb-5">
             <div class="col-auto mx-5 ">
                 <label class="sr-only" for="selectCredit">Кредит</label>
@@ -47,7 +47,7 @@
             </div>
             <div class="col-auto mx-5">
                 <label id="labelRange" for="customRange3" class="form-label">Срок кредита (лет) </label>
-                <input type="range" name="countMonth" class="form-range" min="12" max="180" step="12" id="customRange3">
+                <input type="range" name="countMonth" class="form-range" min="12" max="180" step="12" id="customRange3"/>
             </div>
         </div>
         <div class="row">
@@ -65,7 +65,7 @@
         <div class="col-6 col-md-4">
             <fieldset disabled aria-label="Disabled example">
                 <label class="sr-only" for="creditAmount">Итоговая сумма</label>
-                <input type="text" class="form-control" id="creditAmount">
+                <input type="text" class="form-control" id="creditAmount"/>
             </fieldset>
         </div>
         <div class="col-6 col-md-4"></div>

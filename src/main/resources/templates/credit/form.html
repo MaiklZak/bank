@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8"/>
     <title>Credit</title>
     <th:block th:insert="fragments/common :: head"/>
 </head>
@@ -17,20 +17,20 @@
     </div>
     <h2 class="h2 mt-5 mb-5">Кредит</h2>
     <form method="post" th:action="${credit.id == null ? '/credits/new' : '/credits/update'}" th:object="${credit}">
-        <input type="hidden" th:field="*{id}">
+        <input type="hidden" th:field="*{id}"/>
         <div class="row row-cols-4 justify-content-md-center">
             <div class="col">
                 <label for="limit" class="form-label">Лимит</label>
                 <input type="text" id="limit"
                        th:class="${#fields.hasErrors('limitOn')} ? 'form-control is-invalid' : 'form-control'"
-                       th:field="*{limitOn}">
+                       th:field="*{limitOn}"/>
                 <div class="invalid-feedback" th:if="${#fields.hasErrors('limitOn')}" th:errors="*{limitOn}"></div>
             </div>
             <div class="col">
                 <label for="interestRate" class="form-label">Процентная ставка</label>
                 <input type="text" id="interestRate"
                        th:class="${#fields.hasErrors('interestRate')} ? 'form-control is-invalid' : 'form-control'"
-                       th:field="*{interestRate}">
+                       th:field="*{interestRate}"/>
                 <div class="invalid-feedback" th:if="${#fields.hasErrors('interestRate')}" th:errors="*{interestRate}"></div>
             </div>
         </div>

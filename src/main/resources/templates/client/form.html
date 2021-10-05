@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8"/>
     <title>Client</title>
     <th:block th:insert="fragments/common :: head"/>
 </head>
@@ -15,14 +15,14 @@
     </nav>
     <h2 class="h2 mt-5 mb-5">Клиент</h2>
     <form method="post" th:action="${client.id == null ? '/clients/new' : '/clients/update'}" th:object="${client}">
-        <input type="hidden" th:field="*{id}">
+        <input type="hidden" th:field="*{id}"/>
         <div class="row justify-content-evenly">
             <div class="col-4">
                 <div class="mb-3">
                     <label for="fullName" class="form-label">ФИО</label>
                     <input type="text" id="fullName"
                            th:class="${#fields.hasErrors('fullName')} ? 'form-control is-invalid' : 'form-control'"
-                           th:field="*{fullName}">
+                           th:field="*{fullName}"/>
                     <div class="invalid-feedback" th:if="${#fields.hasErrors('fullName')}"
                          th:errors="*{fullName}"></div>
                 </div>
@@ -32,7 +32,7 @@
                     <label for="email" class="form-label">Эл. почта</label>
                     <input type="email" id="email"
                            th:class="${#fields.hasErrors('email')} ? 'form-control is-invalid' : 'form-control'"
-                           th:field="*{email}">
+                           th:field="*{email}"/>
                     <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
                 </div>
             </div>
@@ -43,7 +43,7 @@
                     <label for="phone" class="form-label">Телефон</label>
                     <input type="text" id="phone"
                            th:class="${#fields.hasErrors('phone')} ? 'form-control is-invalid' : 'form-control'"
-                           th:field="*{phone}">
+                           th:field="*{phone}"/>
                     <div class="invalid-feedback" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></div>
                 </div>
             </div>
@@ -52,7 +52,7 @@
                     <label for="passport" class="form-label">Паспорт</label>
                     <input type="text" id="passport"
                            th:class="${#fields.hasErrors('passport')} ? 'form-control is-invalid' : 'form-control'"
-                           th:field="*{passport}">
+                           th:field="*{passport}"/>
                     <div class="invalid-feedback" th:if="${#fields.hasErrors('passport')}"
                          th:errors="*{passport}"></div>
                 </div>
@@ -72,7 +72,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                    <h5 class="modal-title" id="staticBackdropLabel">Внимание</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
