@@ -12,11 +12,13 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.UUID;
 
-import static com.app.offerCreditApp.TestData.CLIENT_DTO_NEW;
+import static com.app.offerCreditApp.TestData.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -37,19 +39,22 @@ class ClientControllerTest extends AbstractTest {
     }
 
     @Test
+    @Sql(value = "/scripts-test/clientTestScripts/before.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(value = "/scripts-test/clientTestScripts/after.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void getPageOfClientsList() throws Exception {
         mockMvc.perform(get("/clients")
                         .accept(MediaType.TEXT_HTML))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(view().name("client/list"))
-                .andExpect(model().attributeExists("clients"))
-                .andExpect(xpath("//*[@id=\"bodyClient\"]/section/h2").string("Клиенты"));
+                .andExpect(model().attribute("clients", hasSize(20)))
+                .andExpect(xpath("//*[@id=\"bodyClient\"]/section/h2").string("Клиенты"))
+                .andExpect(xpath("//*[@id=\"tableClients\"]/tbody/tr").nodeCount(20));
     }
 
     @Test
-    @Sql(value = "/scripts-test/clientServiceTestScripts/before.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(value = "/scripts-test/clientServiceTestScripts/after.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @Sql(value = "/scripts-test/clientTestScripts/before.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(value = "/scripts-test/clientTestScripts/after.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void testGetPageOfClientsList() throws Exception {
         mockMvc.perform(get("/clients")
                         .param("offset", "0")
@@ -95,13 +100,15 @@ class ClientControllerTest extends AbstractTest {
     @Test
     void updateClient() throws Exception {
         UUID idOfSavedClient = clientService.save(CLIENT_DTO_NEW);
-        CLIENT_DTO_NEW.setId(idOfSavedClient);
+        CLIENT_DTO_UPDATE.setId(idOfSavedClient);
         mockMvc.perform(post("/clients/update")
-                        .flashAttr("client", CLIENT_DTO_NEW))
+                        .flashAttr("client", CLIENT_DTO_UPDATE))
                 .andDo(print())
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/clients/" + CLIENT_DTO_NEW.getId()))
+                .andExpect(redirectedUrl("/clients/" + CLIENT_DTO_UPDATE.getId()))
                 .andExpect(flash().attribute("message", "Client successfully updated"));
+
+        assertThat(clientService.getById(idOfSavedClient)).usingRecursiveComparison().isEqualTo(CLIENT_DTO_UPDATE);
     }
 
     @Test
@@ -131,6 +138,11 @@ class ClientControllerTest extends AbstractTest {
                 .andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(flash().attribute("message", "Client successfully saved"));
+
+        Optional<ClientDto> optionalClientDto = clientService.getAll().stream().findFirst();
+
+        assertTrue(optionalClientDto.isPresent());
+        assertThat(optionalClientDto.get()).usingRecursiveComparison().ignoringFields("id").isEqualTo(CLIENT_DTO_NEW);
     }
 
     @Test
@@ -141,5 +153,8 @@ class ClientControllerTest extends AbstractTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/clients/"))
                 .andExpect(flash().attribute("message", "Client successfully removed"));
+
+        assertThrows(NoSuchEntityException.class, () -> clientService.getById(idOfClient));
+        assertTrue(clientService.getAll().isEmpty());
     }
 }

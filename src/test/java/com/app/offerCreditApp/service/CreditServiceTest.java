@@ -43,8 +43,8 @@ class CreditServiceTest extends AbstractTest {
     }
 
     @Test
-    @Sql(value = "/scripts-test/creditServiceTestScripts/before.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(value = "/scripts-test/creditServiceTestScripts/after.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @Sql(value = "/scripts-test/creditTestScripts/before.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(value = "/scripts-test/creditTestScripts/after.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void getAll() {
         List<CreditDto> allCredits = creditService.getAll();
 

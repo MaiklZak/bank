@@ -17,8 +17,8 @@ public class TestData {
     public static final ClientDto CLIENT_DTO_UPDATE = new ClientDto(null, "Test Client Update", "+7 (222) 111-11-11", "update@mail.org", "99 12 121 999");
 
     public static final Integer SIZE_ALL_CREDITS = 20;
-    public static final CreditDto CREDIT_DTO_NEW = new CreditDto(null, BigDecimal.valueOf(100000), BigDecimal.valueOf(20));
-    public static final CreditDto CREDIT_DTO_UPDATE = new CreditDto(null, BigDecimal.valueOf(505000), BigDecimal.valueOf(15));
+    public static final CreditDto CREDIT_DTO_NEW = new CreditDto(null, new BigDecimal("100000.00"), new BigDecimal("20.00"));
+    public static final CreditDto CREDIT_DTO_UPDATE = new CreditDto(null, new BigDecimal("505000.00"), new BigDecimal("15.00"));
 
     public static final OfferDto OFFER_DTO = new OfferDto();
 

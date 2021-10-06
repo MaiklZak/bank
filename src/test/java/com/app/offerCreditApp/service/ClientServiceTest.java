@@ -42,8 +42,8 @@ class ClientServiceTest extends AbstractTest {
     }
 
     @Test
-    @Sql(value = "/scripts-test/clientServiceTestScripts/before.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(value = "/scripts-test/clientServiceTestScripts/after.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @Sql(value = "/scripts-test/clientTestScripts/before.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(value = "/scripts-test/clientTestScripts/after.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void getAll() {
         List<ClientDto> allClients = clientService.getAll();
 
@@ -53,8 +53,8 @@ class ClientServiceTest extends AbstractTest {
     }
 
     @Test
-    @Sql(value = "/scripts-test/clientServiceTestScripts/before.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(value = "/scripts-test/clientServiceTestScripts/after.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @Sql(value = "/scripts-test/clientTestScripts/before.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(value = "/scripts-test/clientTestScripts/after.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void getPageOfClient() {
         List<ClientDto> pageOfClient = clientService.getPageOfClient(0, 20);
 
