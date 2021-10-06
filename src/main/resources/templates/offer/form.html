@@ -22,7 +22,7 @@
             <div class="col-auto mx-5 ">
                 <label class="sr-only" for="selectCredit">Кредит</label>
                 <select class="form-select" id="selectCredit" name="creditId" required="required">
-                    <option selected value="not" id="defaultOption"
+                    <option selected="selected" value="not" id="defaultOption"
                             th:if="${offer.creditDto != null}"
                             th:value="${offer.creditDto.id}"
                             th:attr="limit=${offer.creditDto.limitOn},rate=${offer.creditDto.interestRate}"
@@ -61,9 +61,9 @@
                    class="btn btn-info mt-2 clearBtn">Сбросить</a></div>
         </div>
     </form>
-    <div class="row" id="formAmount" hidden>
+    <div class="row" id="formAmount" hidden="hidden">
         <div class="col-6 col-md-4">
-            <fieldset disabled aria-label="Disabled example">
+            <fieldset disabled="disabled" aria-label="Disabled example">
                 <label class="sr-only" for="creditAmount">Итоговая сумма</label>
                 <input type="text" class="form-control" id="creditAmount"/>
             </fieldset>

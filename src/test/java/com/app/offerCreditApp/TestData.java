@@ -21,10 +21,13 @@ public class TestData {
     public static final CreditDto CREDIT_DTO_UPDATE = new CreditDto(null, new BigDecimal("505000.00"), new BigDecimal("15.00"));
 
     public static final OfferDto OFFER_DTO = new OfferDto();
+    public static final OfferDto OFFER_DTO_CUSTOM = new OfferDto();
 
     public static final List<SchedulePaymentDto> SCHEDULE_PAYMENT_DTO_LIST = new ArrayList<>();
 
     static {
+        OFFER_DTO_CUSTOM.setClientDto(CLIENT_DTO_NEW);
+        OFFER_DTO_CUSTOM.setCreditDto(CREDIT_DTO_NEW);
         for (int i = 0; i < 20; i++) {
             SCHEDULE_PAYMENT_DTO_LIST.add(new SchedulePaymentDto(new Date(), BigDecimal.valueOf(1000 + i), BigDecimal.valueOf(100 + i), BigDecimal.valueOf(150 + i)));
         }

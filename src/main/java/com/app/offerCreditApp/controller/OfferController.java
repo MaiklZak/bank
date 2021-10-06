@@ -54,7 +54,7 @@ public class OfferController {
     }
 
     @GetMapping("/new/{clientId}")
-    public String getPageCreatOfferForClient(@PathVariable UUID clientId, Model model) throws NoSuchEntityException {
+    public String getPageCreateOfferForClient(@PathVariable UUID clientId, Model model) throws NoSuchEntityException {
         logger.info("Getting page for creating offer");
         ClientDto clientDtoById = clientService.getById(clientId);
         OfferDto newOffer = new OfferDto();
